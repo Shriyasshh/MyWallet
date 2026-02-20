@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}MyWallet | Add Account {% endblock %}
+{% block content-head %}
+<link rel="stylesheet" href="{% static 'css/add_account.css' %}">
+
+{% endblock %}
+{% block content %}
+<div class="container-xl" style="padding-bottom: 4rem;">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar fade-up">
+        <a href="{% url 'home' %}">Dashboard</a>
+        <span class="sep">›</span>
+        <a href="#">Accounts</a>
+        <span class="sep">›</span>
+        <span class="current">Add Account</span>
+    </div>
+
+    <!-- Header -->
+    <div class="page-header fade-up">
+        <div class="page-label">Accounts</div>
+        <h1 class="page-title">Add New Account</h1>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- LEFT: FORM -->
+        <div class="col-lg-7">
+            <form action="" method="post">
+                {% csrf_token %}
+                <!-- Step 1: Account Type -->
+                <div class="form-card fade-up">
+                    <div class="form-card-title">
+                        <i class="bi bi-grid-3x3-gap-fill"></i>
+                        Choose Account Type
+                    </div>
+                    <div class="type-grid">
+                        <div class="type-card selected" onclick="selectType(this, 'Cash')">
+                            <div class="check"><i class="bi bi-check"></i></div>
+                            <div class="type-icon" style="background:#D1FAE5;color:#10B981;"><i
+                                    class="bi bi-cash-stack"></i></div>
+                            <div class="type-name">Cash</div>
+                            <div class="type-desc">Physical money</div>
+                        </div>
+                        <div class="type-card" onclick="selectType(this, 'Bank')">
+                            <div class="check"><i class="bi bi-check"></i></div>
+                            <div class="type-icon" style="background:#E0F2FE;color:#0284C7;"><i
+                                    class="bi bi-building-fill"></i></div>
+                            <div class="type-name">Bank Account</div>
+                            <div class="type-desc">Checking / Savings</div>
+                        </div>
+                        <div class="type-card" onclick="selectType(this, 'Credit Card')">
+                            <div class="check"><i class="bi bi-check"></i></div>
+                            <div class="type-icon" style="background:#FEE2E2;color:#EF4444;"><i
+                                    class="bi bi-credit-card-2-front-fill"></i></div>
+                            <div class="type-name">Credit Card</div>
+                            <div class="type-desc">Track debt</div>
+                        </div>
+                        <div class="type-card" onclick="selectType(this, 'Savings')">
+                            <div class="check"><i class="bi bi-check"></i></div>
+                            <div class="type-icon" style="background:#EDE9FE;color:#8B5CF6;"><i
+                                    class="bi bi-safe2-fill"></i></div>
+                            <div class="type-name">Savings Goal</div>
+                            <div class="type-desc">Dedicated savings</div>
+                        </div>
+                        <div class="type-card" onclick="selectType(this, 'Investment')">
+                            <div class="check"><i class="bi bi-check"></i></div>
+                            <div class="type-icon" style="background:#FEF3C7;color:#F59E0B;"><i
+                                    class="bi bi-graph-up-arrow"></i></div>
+                            <div class="type-name">Investment</div>
+                            <div class="type-desc">Stocks & ETFs</div>
+                        </div>
+                        <div class="type-card" onclick="selectType(this, 'Wallet')">
+                            <div class="check"><i class="bi bi-check"></i></div>
+                            <div class="type-icon" style="background:#FDF4FF;color:#A855F7;"><i
+                                    class="bi bi-phone-fill"></i></div>
+                            <div class="type-name">E-Wallet</div>
+                            <div class="type-desc">UPI / PayPal</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Basic Details -->
+                <div class="form-card fade-up">
+                    <div class="form-card-title">
+                        <i class="bi bi-info-circle-fill"></i>
+                        Account Details
+                    </div>
+
+                    <div class="f-group">
+                        <label class="f-label">Account Name <span style="color:var(--red);">*</span></label>
+                        <input class="f-input" type="text" id="acc-name" placeholder="e.g. HDFC Savings Account"
+                            oninput="updatePreview()" />
+                    </div>
+
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label">Opening Balance <span style="color:var(--red);">*</span></label>
+                            <div class="input-prefix">
+                                <span class="prefix">$</span>
+                                <input class="f-input" type="number" id="acc-balance" placeholder="0.00" step="0.01"
+                                    oninput="updatePreview()" />
+                            </div>
+                        </div>
+                        <div class="f-group">
+                            <label class="f-label">Currency</label>
+                            <select class="f-select">
+                                <option>USD — US Dollar</option>
+                                <option>EUR — Euro</option>
+                                <option>GBP — British Pound</option>
+                                <option>INR — Indian Rupee</option>
+                                <option>JPY — Japanese Yen</option>
+                                <option>CAD — Canadian Dollar</option>
+                                <option>AUD — Australian Dollar</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label">Bank / Institution</label>
+                            <input class="f-input" type="text" placeholder="e.g. Chase, HDFC, Fidelity" />
+                        </div>
+                        <div class="f-group">
+                            <label class="f-label">Account Number (optional)</label>
+                            <input class="f-input" type="text" placeholder="Last 4 digits e.g. 4521" />
+                        </div>
+                    </div>
+
+                    <div class="f-group">
+                        <label class="f-label">Description / Notes</label>
+                        <textarea class="f-input" rows="2" placeholder="Any notes about this account…"
+                            style="resize:none;"></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 3: Appearance -->
+                <div class="form-card fade-up">
+                    <div class="form-card-title">
+                        <i class="bi bi-palette-fill"></i>
+                        Appearance
+                    </div>
+
+                    <div class="f-group">
+                        <label class="f-label">Card Color</label>
+                        <div class="color-grid" id="colorGrid">
+                            <div class="color-dot selected" style="background:#0F172A;" data-color="#0F172A"
+                                onclick="pickColor(this)"></div>
+                            <div class="color-dot" style="background:#10B981;" data-color="#10B981"
+                                onclick="pickColor(this)"></div>
+                            <div class="color-dot" style="background:#38BDF8;" data-color="#38BDF8"
+                                onclick="pickColor(this)"></div>
+                            <div class="color-dot" style="background:#8B5CF6;" data-color="#8B5CF6"
+                                onclick="pickColor(this)"></div>
+                            <div class="color-dot" style="background:#EF4444;" data-color="#EF4444"
+                                onclick="pickColor(this)"></div>
+                            <div class="color-dot" style="background:#F59E0B;" data-color="#F59E0B"
+                                onclick="pickColor(this)"></div>
+                            <div class="color-dot" style="background:#EC4899;" data-color="#EC4899"
+                                onclick="pickColor(this)"></div>
+                            <div class="color-dot" style="background:#14B8A6;" data-color="#14B8A6"
+                                onclick="pickColor(this)"></div>
+                            <div class="color-dot" style="background:#6366F1;" data-color="#6366F1"
+                                onclick="pickColor(this)"></div>
+                            <div class="color-dot" style="background:#F97316;" data-color="#F97316"
+                                onclick="pickColor(this)"></div>
+                        </div>
+                    </div>
+
+                    <div class="f-group" style="margin-top:1rem;">
+                        <label class="f-label">Account Icon</label>
+                        <div class="icon-grid" id="iconGrid">
+                            <div class="icon-opt selected" data-icon="cash" onclick="pickIcon(this)"><i
+                                    class="bi bi-cash-stack"></i></div>
+                            <div class="icon-opt" data-icon="bank" onclick="pickIcon(this)"><i
+                                    class="bi bi-building-fill"></i></div>
+                            <div class="icon-opt" data-icon="card" onclick="pickIcon(this)"><i
+                                    class="bi bi-credit-card-2-front-fill"></i></div>
+                            <div class="icon-opt" data-icon="safe" onclick="pickIcon(this)"><i
+                                    class="bi bi-safe2-fill"></i>
+                            </div>
+                            <div class="icon-opt" data-icon="graph" onclick="pickIcon(this)"><i
+                                    class="bi bi-graph-up-arrow"></i></div>
+                            <div class="icon-opt" data-icon="phone" onclick="pickIcon(this)"><i
+                                    class="bi bi-phone-fill"></i></div>
+                            <div class="icon-opt" data-icon="piggy" onclick="pickIcon(this)"><i
+                                    class="bi bi-piggy-bank-fill"></i></div>
+                            <div class="icon-opt" data-icon="wallet" onclick="pickIcon(this)"><i
+                                    class="bi bi-wallet2"></i>
+                            </div>
+                            <div class="icon-opt" data-icon="star" onclick="pickIcon(this)"><i
+                                    class="bi bi-star-fill"></i>
+                            </div>
+                            <div class="icon-opt" data-icon="globe" onclick="pickIcon(this)"><i class="bi bi-globe"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Settings -->
+                <div class="form-card fade-up">
+                    <div class="form-card-title">
+                        <i class="bi bi-gear-fill"></i>
+                        Account Settings
+                    </div>
+                    <div class="toggle-row">
+                        <div>
+                            <div class="toggle-label">Include in Total Balance</div>
+                            <div class="toggle-sub">Count this account in your net worth</div>
+                        </div>
+                        <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+                    </div>
+                    <div class="toggle-row">
+                        <div>
+                            <div class="toggle-label">Show on Dashboard</div>
+                            <div class="toggle-sub">Display this account card on the home screen</div>
+                        </div>
+                        <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+                    </div>
+                    <div class="toggle-row">
+                        <div>
+                            <div class="toggle-label">Enable Budget Tracking</div>
+                            <div class="toggle-sub">Set monthly spending limits for this account</div>
+                        </div>
+                        <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+                    </div>
+                    <div class="toggle-row">
+                        <div>
+                            <div class="toggle-label">Low Balance Alerts</div>
+                            <div class="toggle-sub">Notify when balance drops below threshold</div>
+                        </div>
+                        <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-3 fade-up">
+                <button class="btn-submit" onclick="window.location.href='index.html'">
+                    <i class="bi bi-check-circle-fill"></i> Save Account
+                </button>
+                <button class="btn-cancel" onclick="window.history.back()">Cancel</button>
+            </div>
+
+        </div>
+
+        <!-- RIGHT: PREVIEW -->
+        <div class="col-lg-5">
+            <div style="position: sticky; top: 84px;">
+
+                <!-- Live Preview -->
+                <div class="form-card fade-up"
+                    style="background: var(--bg); box-shadow: none; border: 1.5px dashed var(--border);">
+                    <div class="form-card-title" style="justify-content: center; color: var(--text-muted);">
+                        Live Preview
+                    </div>
+                    <div class="preview-card" id="previewCard">
+                        <div class="preview-icon-wrap" id="previewIcon">
+                            <i class="bi bi-cash-stack"></i>
+                        </div>
+                        <div class="preview-acc-name" id="previewName">Account Name</div>
+                        <div class="preview-acc-bal" id="previewBal">$0.00</div>
+                        <div class="preview-acc-type" id="previewType">Cash</div>
+                    </div>
+                </div>
+
+                <!-- Tips Card -->
+                <div class="form-card mt-3 fade-up"
+                    style="background: linear-gradient(135deg, #F0FDF9, #E0F7FA); border-color: #A7F3D0;">
+                    <div class="form-card-title" style="color: #065F46;">
+                        <i class="bi bi-lightbulb-fill" style="background:#A7F3D0;color:#065F46;"></i>
+                        Pro Tips
+                    </div>
+                    <div style="font-size: 0.78rem; color: #047857; line-height: 1.6;">
+                        <div style="margin-bottom: 8px;"><i class="bi bi-check2 me-2"></i>Add your opening balance
+                            accurately for correct reporting.</div>
+                        <div style="margin-bottom: 8px;"><i class="bi bi-check2 me-2"></i>Use descriptive names like
+                            "HDFC Salary Account" instead of just "Bank".</div>
+                        <div style="margin-bottom: 8px;"><i class="bi bi-check2 me-2"></i>Enable budget tracking to get
+                            spending alerts per account.</div>
+                        <div><i class="bi bi-check2 me-2"></i>You can always edit account details later from Account
+                            Settings.</div>
+                    </div>
+                </div>
+
+                <!-- Existing accounts summary -->
+                <div class="form-card mt-3 fade-up">
+                    <div class="form-card-title">
+                        <i class="bi bi-collection-fill"></i> Existing Accounts
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <div
+                            style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:#F8FAFC;border-radius:8px;">
+                            <div
+                                style="display:flex;align-items:center;gap:10px;font-size:0.78rem;font-weight:600;color:var(--navy);">
+                                <span style="font-size:0.9rem;">💵</span> Cash
+                            </div>
+                            <span style="font-size:0.78rem;font-weight:700;color:var(--emerald);">$1,250</span>
+                        </div>
+                        <div
+                            style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:#F8FAFC;border-radius:8px;">
+                            <div
+                                style="display:flex;align-items:center;gap:10px;font-size:0.78rem;font-weight:600;color:var(--navy);">
+                                <span style="font-size:0.9rem;">🏦</span> Chase Checking
+                            </div>
+                            <span style="font-size:0.78rem;font-weight:700;color:var(--emerald);">$8,340</span>
+                        </div>
+                        <div
+                            style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:#F8FAFC;border-radius:8px;">
+                            <div
+                                style="display:flex;align-items:center;gap:10px;font-size:0.78rem;font-weight:600;color:var(--navy);">
+                                <span style="font-size:0.9rem;">🔒</span> Savings
+                            </div>
+                            <span style="font-size:0.78rem;font-weight:700;color:var(--emerald);">$12,700</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let selectedColor = '#0F172A';
+    let selectedType = 'Cash';
+
+    function selectType(card, type) {
+        document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedType = type;
+        document.getElementById('previewType').textContent = type;
+    }
+
+    function pickColor(dot) {
+        document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+        dot.classList.add('selected');
+        selectedColor = dot.dataset.color;
+        document.getElementById('previewCard').style.background = selectedColor;
+    }
+
+    function pickIcon(opt) {
+        document.querySelectorAll('.icon-opt').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        document.getElementById('previewIcon').innerHTML = opt.innerHTML;
+    }
+
+    function updatePreview() {
+        const name = document.getElementById('acc-name').value || 'Account Name';
+        const bal = parseFloat(document.getElementById('acc-balance').value) || 0;
+        document.getElementById('previewName').textContent = name;
+        document.getElementById('previewBal').textContent = '$' + bal.toLocaleString('en-US', { minimumFractionDigits: 2 });
+    }
+</script>
+
+{% endblock %}

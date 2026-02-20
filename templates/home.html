@@ -3,6 +3,263 @@
 {% block title %}MyWallet | Home{% endblock %}
 
 {% block content %}
+<div id="page-dashboard" class="page active page-content">
+    <div class="container-xl">
+
+        <!-- Greeting Banner -->
+        <div class="greeting-banner fade-in">
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <p class="mb-1" style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-weight:500;">FRIDAY, FEB
+                        20, 2026</p>
+                    <h2 class="greeting-name">Good morning, John! 👋</h2>
+                    <p class="greeting-sub">Your finances are looking healthy this month. Keep it up.</p>
+                </div>
+                <div class="col-md-5 net-worth-box mt-3 mt-md-0">
+                    <div class="net-worth-label">Total Net Worth</div>
+                    <div class="net-worth-value">$24,850.00</div>
+                    <div class="net-worth-change"><i class="bi bi-arrow-up-right"></i> +$1,240 this month (+5.2%)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="row g-3 mb-4 fade-in">
+            <div class="col-6 col-md-3">
+                <div class="stat-mini-card">
+                    <div class="stat-mini-label">Monthly Income</div>
+                    <div class="stat-mini-value" style="color:var(--emerald);">$5,200</div>
+                    <div class="stat-mini-bar" style="background:var(--emerald-light);">
+                        <div style="width:80%;height:100%;background:var(--emerald);border-radius:50px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-mini-card">
+                    <div class="stat-mini-label">Monthly Expenses</div>
+                    <div class="stat-mini-value" style="color:var(--red);">$3,120</div>
+                    <div class="stat-mini-bar" style="background:var(--red-light);">
+                        <div style="width:60%;height:100%;background:var(--red);border-radius:50px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-mini-card">
+                    <div class="stat-mini-label">Savings Rate</div>
+                    <div class="stat-mini-value" style="color:var(--sky);">40%</div>
+                    <div class="stat-mini-bar" style="background:var(--sky-light);">
+                        <div style="width:40%;height:100%;background:var(--sky);border-radius:50px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-mini-card">
+                    <div class="stat-mini-label">Transactions</div>
+                    <div class="stat-mini-value" style="color:var(--purple);">47</div>
+                    <div class="stat-mini-bar" style="background:var(--purple-light);">
+                        <div style="width:55%;height:100%;background:var(--purple);border-radius:50px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accounts Section -->
+        <div class="mb-2 fade-in">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div>
+                    <div class="section-label">Assets</div>
+                    <div class="section-title mb-0">My Accounts</div>
+                </div>
+                <a href="#" onclick="showPage('accounts', document.getElementById('nav-accounts')); return false;"
+                    style="font-size:0.78rem;color:var(--emerald);font-weight:600;text-decoration:none;">
+                    View All <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+            <div class="row g-3">
+                <div class="col-6 col-md-3">
+                    <div class="account-card">
+                        <div class="account-icon cash"><i class="bi bi-cash-stack"></i></div>
+                        <div class="account-name">Cash</div>
+                        <div class="account-balance">$1,250.00</div>
+                        <div class="mt-2"><span class="account-badge"
+                                style="background:var(--emerald-light);color:#065F46;">Personal</span></div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="account-card">
+                        <div class="account-icon bank"><i class="bi bi-building-fill"></i></div>
+                        <div class="account-name">Chase Checking</div>
+                        <div class="account-balance">$8,340.00</div>
+                        <div class="mt-2"><span class="account-badge"
+                                style="background:var(--sky-light);color:#075985;">Bank</span></div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="account-card">
+                        <div class="account-icon savings"><i class="bi bi-safe2-fill"></i></div>
+                        <div class="account-name">Savings</div>
+                        <div class="account-balance">$12,700.00</div>
+                        <div class="mt-2"><span class="account-badge"
+                                style="background:var(--purple-light);color:#4C1D95;">Savings</span></div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="account-card">
+                        <div class="account-icon invest"><i class="bi bi-graph-up-arrow"></i></div>
+                        <div class="account-name">Investment</div>
+                        <div class="account-balance">$2,560.00</div>
+                        <div class="mt-2"><span class="account-badge"
+                                style="background:var(--amber-light);color:#92400E;">Invest</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Pills -->
+        <div class="d-flex flex-wrap gap-3 my-4 fade-in">
+            <div class="summary-pill">
+                <div class="pill-icon debt"><i class="bi bi-exclamation-circle-fill"></i></div>
+                <div>
+                    <div class="pill-label">Debt</div>
+                    <div class="pill-value debt">$2,400.00</div>
+                </div>
+            </div>
+            <div class="summary-pill">
+                <div class="pill-icon spend"><i class="bi bi-receipt"></i></div>
+                <div>
+                    <div class="pill-label">Spending (Feb)</div>
+                    <div class="pill-value spend">$3,120.00</div>
+                </div>
+            </div>
+            <div class="summary-pill">
+                <div class="pill-icon planned"><i class="bi bi-calendar-check"></i></div>
+                <div>
+                    <div class="pill-label">Planned Payments</div>
+                    <div class="pill-value planned">$870.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Last Records -->
+        <div class="mb-5 fade-in">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div>
+                    <div class="section-label">Overview</div>
+                    <div class="section-title mb-0">Last Records</div>
+                </div>
+                <a href="#"
+                    onclick="showPage('transactions', document.getElementById('nav-transactions')); return false;"
+                    style="font-size:0.78rem;color:var(--emerald);font-weight:600;text-decoration:none;">
+                    See All <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="table-card">
+                <div class="table-card-header">
+                    <div>
+                        <p class="table-card-title">Last 10 Transactions</p>
+                        <p class="table-card-sub">All accounts combined</p>
+                    </div>
+                    <span
+                        style="font-size:0.72rem;background:var(--emerald-light);color:#065F46;padding:4px 10px;border-radius:50px;font-weight:700;">Feb
+                        2026</span>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="records-table">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Method</th>
+                                <th>Date</th>
+                                <th>Note</th>
+                                <th style="text-align:right;">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="cat-badge cat-salary"><i class="bi bi-briefcase-fill"></i>
+                                        Salary</span></td>
+                                <td><span class="method-chip">Chase Checking</span></td>
+                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 20</td>
+                                <td><span class="note-text">Monthly salary deposit</span></td>
+                                <td style="text-align:right;"><span class="balance-income">+$5,200.00</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-badge cat-rent"><i class="bi bi-house-fill"></i> Rent</span></td>
+                                <td><span class="method-chip">Chase Checking</span></td>
+                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 19</td>
+                                <td><span class="note-text">Monthly apartment rent</span></td>
+                                <td style="text-align:right;"><span class="balance-expense">-$1,450.00</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-badge cat-food"><i class="bi bi-egg-fried"></i> Food</span></td>
+                                <td><span class="method-chip">Cash</span></td>
+                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 18</td>
+                                <td><span class="note-text">Grocery run — Whole Foods</span></td>
+                                <td style="text-align:right;"><span class="balance-expense">-$87.50</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-badge cat-trans"><i class="bi bi-car-front-fill"></i>
+                                        Transport</span></td>
+                                <td><span class="method-chip">Chase Checking</span></td>
+                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 17</td>
+                                <td><span class="note-text">Uber rides this week</span></td>
+                                <td style="text-align:right;"><span class="balance-expense">-$34.20</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-badge cat-health"><i class="bi bi-heart-pulse-fill"></i>
+                                        Health</span></td>
+                                <td><span class="method-chip">Savings</span></td>
+                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 16</td>
+                                <td><span class="note-text">Gym membership Feb</span></td>
+                                <td style="text-align:right;"><span class="balance-expense">-$45.00</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-badge cat-salary"><i class="bi bi-laptop-fill"></i>
+                                        Freelance</span></td>
+                                <td><span class="method-chip">Chase Checking</span></td>
+                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 15</td>
+                                <td><span class="note-text">Website project payment</span></td>
+                                <td style="text-align:right;"><span class="balance-income">+$850.00</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-badge cat-util"><i class="bi bi-lightning-charge-fill"></i>
+                                        Utilities</span></td>
+                                <td><span class="method-chip">Chase Checking</span></td>
+                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 14</td>
+                                <td><span class="note-text">Electric + Internet bill</span></td>
+                                <td style="text-align:right;"><span class="balance-expense">-$120.00</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-badge cat-shop"><i class="bi bi-bag-fill"></i> Shopping</span></td>
+                                <td><span class="method-chip">Cash</span></td>
+                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 13</td>
+                                <td><span class="note-text">New sneakers — Nike</span></td>
+                                <td style="text-align:right;"><span class="balance-expense">-$160.00</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-badge cat-entert"><i class="bi bi-play-circle-fill"></i>
+                                        Entertainment</span></td>
+                                <td><span class="method-chip">Savings</span></td>
+                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 12</td>
+                                <td><span class="note-text">Netflix + Spotify subs</span></td>
+                                <td style="text-align:right;"><span class="balance-expense">-$28.00</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-badge cat-food"><i class="bi bi-cup-hot-fill"></i> Food</span></td>
+                                <td><span class="method-chip">Cash</span></td>
+                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 11</td>
+                                <td><span class="note-text">Coffee + lunch meeting</span></td>
+                                <td style="text-align:right;"><span class="balance-expense">-$22.50</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 
 {% endblock %}
