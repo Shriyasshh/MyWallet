@@ -7,6 +7,8 @@ db.sqlite3
 media
 
 extend_base.txt
+Z-Notes
+
 
 # Backup files # 
 *.bak 
