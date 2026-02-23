@@ -1,0 +1,269 @@
+{% extends "base.html" %} {% block title %}MyWallet | Accounts {% endblock %} 
+{% block content-head %} {% endblock %} 
+{% block content %}
+<div id="page-accounts" class="page page-content">
+	<div class="container-xl">
+		<div class="d-flex align-items-center justify-content-between mb-4 fade-in">
+			<div>
+				<div class="section-label">Manage</div>
+				<div class="section-title mb-0">All Accounts</div>
+			</div>
+			<a href="{% url 'add_account' %}" class="btn btn-primary add-account-btn text-light"><i
+					class="bi bi-plus-circle-fill"></i> Add Account</a>
+		</div>
+
+		<!-- Summary Row -->
+		<div class="row g-3 mb-4 fade-in">
+			<div class="col-md-4">
+				<div class="stat-mini-card text-center p-3">
+					<div class="stat-mini-label mb-2">Total Assets</div>
+					<div style="
+                            font-size: 1.8rem;
+                            font-weight: 800;
+                            color: var(--emerald);
+                        ">
+						{{currency}} {{total_balance}}
+					</div>
+					<div style="font-size: 0.72rem; color: var(--text-muted)">
+						Across 4 accounts
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="stat-mini-card text-center p-3">
+					<div class="stat-mini-label mb-2">Total Debt</div>
+					<div style="
+                            font-size: 1.8rem;
+                            font-weight: 800;
+                            color: var(--red);
+                        ">
+						$2,400
+					</div>
+					<div style="font-size: 0.72rem; color: var(--text-muted)">
+						1 credit account
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="stat-mini-card text-center p-3">
+					<div class="stat-mini-label mb-2">Net Worth</div>
+					<div style="
+                            font-size: 1.8rem;
+                            font-weight: 800;
+                            color: var(--navy);
+                        ">
+						$22,450
+					</div>
+					<div style="font-size: 0.72rem; color: var(--emerald)">
+						<i class="bi bi-arrow-up"></i> +5.2% this month
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Account Detail Cards -->
+		<div class="row g-3 fade-in">
+			<!-- Account Card -->
+			{% if acc %}
+			{% for acc in acc %}
+			<div class="col-md-6">
+				<div class="account-detail-card">
+					<div class="account-detail-header">
+						<!-- Account Icon -->
+						<div class="account-icon cash">
+							<i class="{{acc.icon}}"></i>
+						</div>
+						<div class="flex-grow-1">
+							<!-- Account Name -->
+							<div style="font-weight: 700; color: var(--navy)">
+								{{acc.accountName}}
+							</div>
+							<!-- Description-->
+							<div style="
+                                    font-size: 0.72rem;
+                                    color: var(--text-muted);
+                                ">
+								{{acc.description}}
+							</div>
+						</div>
+						<!-- Account Balance -->
+						<div style="
+                                font-size: 1.3rem;
+                                font-weight: 800;
+                                color: var(--emerald);
+                            ">
+							{{acc.get_currency_display}} {{acc.accountBalance}}
+						</div>
+					</div>
+					<!-- Transactions -->
+					<div class="account-mini-txn">
+						<span style="color: var(--text-muted)">Grocery shopping</span><span
+							class="balance-expense">-$87.50</span>
+					</div>
+					<div class="account-mini-txn">
+						<span style="color: var(--text-muted)">Coffee + lunch</span><span
+							class="balance-expense">-$22.50</span>
+					</div>
+					<div class="account-mini-txn">
+						<span style="color: var(--text-muted)">Cash withdrawal</span><span
+							class="balance-expense">-$100.00</span>
+					</div>
+					<div style="padding: 10px 16px; text-align: right">
+						<a href="#" style="
+                                font-size: 0.72rem;
+                                color: var(--emerald);
+                                font-weight: 600;
+                                text-decoration: none;
+                            ">View All Transactions →</a>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+			{% endif %}
+
+			<!-- <div class="col-md-6">
+			<div class="account-detail-card">
+				<div class="account-detail-header">
+					<div class="account-icon bank">
+						<i class="bi bi-building-fill"></i>
+					</div>
+					<div class="flex-grow-1">
+						<div style="font-weight: 700; color: var(--navy)">
+							Chase Checking
+						</div>
+						<div style="
+                                    font-size: 0.72rem;
+                                    color: var(--text-muted);
+                                ">
+							**4521
+						</div>
+					</div>
+					<div style="
+                                font-size: 1.3rem;
+                                font-weight: 800;
+                                color: var(--emerald);
+                            ">
+						$8,340
+					</div>
+				</div>
+				<div class="account-mini-txn">
+					<span style="color: var(--text-muted)">Salary deposit</span><span
+						class="balance-income">+$5,200.00</span>
+				</div>
+				<div class="account-mini-txn">
+					<span style="color: var(--text-muted)">Rent payment</span><span
+						class="balance-expense">-$1,450.00</span>
+				</div>
+				<div class="account-mini-txn">
+					<span style="color: var(--text-muted)">Electric + Internet</span><span
+						class="balance-expense">-$120.00</span>
+				</div>
+				<div style="padding: 10px 16px; text-align: right">
+					<a href="#" style="
+                                font-size: 0.72rem;
+                                color: var(--emerald);
+                                font-weight: 600;
+                                text-decoration: none;
+                            ">View All Transactions →</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="account-detail-card">
+				<div class="account-detail-header">
+					<div class="account-icon savings">
+						<i class="bi bi-safe2-fill"></i>
+					</div>
+					<div class="flex-grow-1">
+						<div style="font-weight: 700; color: var(--navy)">
+							Savings Account
+						</div>
+						<div style="
+                                    font-size: 0.72rem;
+                                    color: var(--text-muted);
+                                ">
+							High-yield · 4.5% APY
+						</div>
+					</div>
+					<div style="
+                                font-size: 1.3rem;
+                                font-weight: 800;
+                                color: var(--emerald);
+                            ">
+						$12,700
+					</div>
+				</div>
+				<div class="account-mini-txn">
+					<span style="color: var(--text-muted)">Auto-save transfer</span><span
+						class="balance-income">+$500.00</span>
+				</div>
+				<div class="account-mini-txn">
+					<span style="color: var(--text-muted)">Interest earned</span><span
+						class="balance-income">+$47.60</span>
+				</div>
+				<div class="account-mini-txn">
+					<span style="color: var(--text-muted)">Gym membership</span><span
+						class="balance-expense">-$45.00</span>
+				</div>
+				<div style="padding: 10px 16px; text-align: right">
+					<a href="#" style="
+                                font-size: 0.72rem;
+                                color: var(--emerald);
+                                font-weight: 600;
+                                text-decoration: none;
+                            ">View All Transactions →</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="account-detail-card">
+				<div class="account-detail-header">
+					<div class="account-icon invest">
+						<i class="bi bi-graph-up-arrow"></i>
+					</div>
+					<div class="flex-grow-1">
+						<div style="font-weight: 700; color: var(--navy)">
+							Investment Portfolio
+						</div>
+						<div style="
+                                    font-size: 0.72rem;
+                                    color: var(--text-muted);
+                                ">
+							Stocks & ETFs
+						</div>
+					</div>
+					<div style="
+                                font-size: 1.3rem;
+                                font-weight: 800;
+                                color: var(--emerald);
+                            ">
+						$2,560
+					</div>
+				</div>
+				<div class="account-mini-txn">
+					<span style="color: var(--text-muted)">S&P 500 ETF</span><span
+						class="balance-income">+$128.40</span>
+				</div>
+				<div class="account-mini-txn">
+					<span style="color: var(--text-muted)">Dividend payment</span><span
+						class="balance-income">+$22.10</span>
+				</div>
+				<div class="account-mini-txn">
+					<span style="color: var(--text-muted)">Monthly invest. buy</span><span
+						class="balance-expense">-$200.00</span>
+				</div>
+				<div style="padding: 10px 16px; text-align: right">
+					<a href="#" style="
+                                font-size: 0.72rem;
+                                color: var(--emerald);
+                                font-weight: 600;
+                                text-decoration: none;
+                            ">View All Transactions →</a>
+				</div>
+			</div>
+		</div> -->
+		</div>
+	</div>
+</div>
+{% endblock %}

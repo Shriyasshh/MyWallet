@@ -3,7 +3,7 @@
 {% block title %}MyWallet | Home{% endblock %}
 
 {% block content %}
-<div id="page-dashboard" class="page active page-content">
+<div id="page-dashboard" class="page  page-content">
     <div class="container-xl">
 
         <!-- Greeting Banner -->
@@ -12,12 +12,12 @@
                 <div class="col-md-7">
                     <p class="mb-1" style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-weight:500;">FRIDAY, FEB
                         20, 2026</p>
-                    <h2 class="greeting-name">Good morning, John! 👋</h2>
+                    <h2 class="greeting-name">Good morning, {{user}}! 👋</h2>
                     <p class="greeting-sub">Your finances are looking healthy this month. Keep it up.</p>
                 </div>
                 <div class="col-md-5 net-worth-box mt-3 mt-md-0">
                     <div class="net-worth-label">Total Net Worth</div>
-                    <div class="net-worth-value">$24,850.00</div>
+                    <div class="net-worth-value">{{currency}} {{total_balance}}</div>
                     <div class="net-worth-change"><i class="bi bi-arrow-up-right"></i> +$1,240 this month (+5.2%)</div>
                 </div>
             </div>
@@ -76,42 +76,20 @@
                 </a>
             </div>
             <div class="row g-3">
+                {% if acc %}
+                {% for acc in acc %}
                 <div class="col-6 col-md-3">
-                    <div class="account-card">
-                        <div class="account-icon cash"><i class="bi bi-cash-stack"></i></div>
-                        <div class="account-name">Cash</div>
-                        <div class="account-balance">$1,250.00</div>
+                    <!-- <div class="account-card" style="background-color: {{ acc.cardColor }}"> -->
+                    <div class="account-card" >
+                        <div class="account-icon cash"><i class="{{acc.icon}}"></i></div>
+                        <div class="account-name">{{acc.accountName}}</div>
+                        <div class="account-balance">{{acc.get_currency_display}} {{acc.accountBalance}}</div>
                         <div class="mt-2"><span class="account-badge"
-                                style="background:var(--emerald-light);color:#065F46;">Personal</span></div>
+                                style="background:var(--emerald-light);color:#065F46;">{{acc.accountType}}</span></div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
-                    <div class="account-card">
-                        <div class="account-icon bank"><i class="bi bi-building-fill"></i></div>
-                        <div class="account-name">Chase Checking</div>
-                        <div class="account-balance">$8,340.00</div>
-                        <div class="mt-2"><span class="account-badge"
-                                style="background:var(--sky-light);color:#075985;">Bank</span></div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="account-card">
-                        <div class="account-icon savings"><i class="bi bi-safe2-fill"></i></div>
-                        <div class="account-name">Savings</div>
-                        <div class="account-balance">$12,700.00</div>
-                        <div class="mt-2"><span class="account-badge"
-                                style="background:var(--purple-light);color:#4C1D95;">Savings</span></div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="account-card">
-                        <div class="account-icon invest"><i class="bi bi-graph-up-arrow"></i></div>
-                        <div class="account-name">Investment</div>
-                        <div class="account-balance">$2,560.00</div>
-                        <div class="mt-2"><span class="account-badge"
-                                style="background:var(--amber-light);color:#92400E;">Invest</span></div>
-                    </div>
-                </div>
+                {% endfor %}
+                {% endif %}
             </div>
         </div>
 

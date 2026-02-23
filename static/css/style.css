@@ -554,12 +554,9 @@ body {
 
 /* ── SECONDARY PAGES ── */
 .page {
-    display: none;
-}
-
-.page.active {
     display: block;
 }
+
 
 /* ── ACCOUNTS PAGE ── */
 .add-account-btn {

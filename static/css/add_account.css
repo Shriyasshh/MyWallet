@@ -328,7 +328,7 @@
 .preview-card {
     border-radius: var(--radius);
     padding: 1.5rem;
-    background: var(--navy);
+    /* background: var(--navy); */
     color: #fff;
     position: relative;
     overflow: hidden;
@@ -352,7 +352,7 @@
 
 .preview-acc-name {
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.5);
+    color:var(--emerald);
     margin-bottom: 4px;
 }
 
@@ -360,12 +360,13 @@
     font-size: 1.8rem;
     font-weight: 800;
     letter-spacing: -0.5px;
+    color: var(--emerald);
 }
 
 .preview-acc-type {
     font-size: 0.68rem;
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.7);
+    background: var(--emerald-light);
+    color: var(--emerald);
     padding: 3px 8px;
     border-radius: 50px;
     display: inline-block;
@@ -376,7 +377,7 @@
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.12);
+    background:var(--emerald-light);
     display: flex;
     align-items: center;
     justify-content: center;
