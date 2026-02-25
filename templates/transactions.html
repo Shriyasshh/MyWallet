@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %} {% endblock %}
+
+{% block content-head %}
+
+
+
+{% endblock %}
+
+{% block content %}
+<div id="page-transactions" class="page page-content">
+    <div class="container-xl">
+
+        <div class="d-flex align-items-center justify-content-between mb-4 fade-in">
+            <div>
+                <div class="section-label">History</div>
+                <div class="section-title mb-0">All Transactions</div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar fade-in">
+            <select class="filter-select">
+                <option>All Dates</option>
+                <option>This Month</option>
+                <option>Last Month</option>
+                <option>Last 3 Months</option>
+                <option>This Year</option>
+            </select>
+            <select class="filter-select">
+                <option>All Categories</option>
+                <option>Food</option>
+                <option>Salary</option>
+                <option>Rent</option>
+                <option>Transport</option>
+                <option>Health</option>
+                <option>Shopping</option>
+            </select>
+            <select class="filter-select">
+                <option>All Accounts</option>
+                <option>Cash</option>
+                <option>Chase Checking</option>
+                <option>Savings</option>
+                <option>Investment</option>
+            </select>
+            <select class="filter-select">
+                <option>All Types</option>
+                <option>Income</option>
+                <option>Expense</option>
+            </select>
+            <div class="search-wrap">
+                <i class="bi bi-search"></i>
+                <input class="search-input" type="text" placeholder="Search transactions…" />
+            </div>
+            <button class="export-btn"><i class="bi bi-download"></i> Export CSV</button>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="table-card fade-in">
+            <div class="table-card-header">
+                <div>
+                    <p class="table-card-title">Transaction History</p>
+                    <p class="table-card-sub">Showing 1–10 of 47 records</p>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="records-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Category</th>
+                            <th>Method</th>
+                            <th>Date</th>
+                            <th>Note</th>
+                            <th style="text-align:right;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="color:var(--text-light);font-size:0.72rem;">47</td>
+                            <td><span class="cat-badge cat-salary"><i class="bi bi-briefcase-fill"></i> Salary</span>
+                            </td>
+                            <td><span class="method-chip">Chase Checking</span></td>
+                            <td style="font-size:0.78rem;color:var(--text-muted);">Feb 20, 2026</td>
+                            <td><span class="note-text">Monthly salary deposit</span></td>
+                            <td style="text-align:right;"><span class="balance-income">+$5,200.00</span></td>
+                        </tr>
+                        <tr>
+                            <td style="color:var(--text-light);font-size:0.72rem;">46</td>
+                            <td><span class="cat-badge cat-rent"><i class="bi bi-house-fill"></i> Rent</span></td>
+                            <td><span class="method-chip">Chase Checking</span></td>
+                            <td style="font-size:0.78rem;color:var(--text-muted);">Feb 19, 2026</td>
+                            <td><span class="note-text">Monthly apartment rent</span></td>
+                            <td style="text-align:right;"><span class="balance-expense">-$1,450.00</span></td>
+                        </tr>
+                        <tr>
+                            <td style="color:var(--text-light);font-size:0.72rem;">45</td>
+                            <td><span class="cat-badge cat-food"><i class="bi bi-egg-fried"></i> Food</span></td>
+                            <td><span class="method-chip">Cash</span></td>
+                            <td style="font-size:0.78rem;color:var(--text-muted);">Feb 18, 2026</td>
+                            <td><span class="note-text">Grocery run — Whole Foods</span></td>
+                            <td style="text-align:right;"><span class="balance-expense">-$87.50</span></td>
+                        </tr>
+                        <tr>
+                            <td style="color:var(--text-light);font-size:0.72rem;">44</td>
+                            <td><span class="cat-badge cat-trans"><i class="bi bi-car-front-fill"></i> Transport</span>
+                            </td>
+                            <td><span class="method-chip">Chase Checking</span></td>
+                            <td style="font-size:0.78rem;color:var(--text-muted);">Feb 17, 2026</td>
+                            <td><span class="note-text">Uber rides this week</span></td>
+                            <td style="text-align:right;"><span class="balance-expense">-$34.20</span></td>
+                        </tr>
+                        <tr>
+                            <td style="color:var(--text-light);font-size:0.72rem;">43</td>
+                            <td><span class="cat-badge cat-health"><i class="bi bi-heart-pulse-fill"></i> Health</span>
+                            </td>
+                            <td><span class="method-chip">Savings</span></td>
+                            <td style="font-size:0.78rem;color:var(--text-muted);">Feb 16, 2026</td>
+                            <td><span class="note-text">Gym membership Feb</span></td>
+                            <td style="text-align:right;"><span class="balance-expense">-$45.00</span></td>
+                        </tr>
+                        <tr>
+                            <td style="color:var(--text-light);font-size:0.72rem;">42</td>
+                            <td><span class="cat-badge cat-salary"><i class="bi bi-laptop-fill"></i> Freelance</span>
+                            </td>
+                            <td><span class="method-chip">Chase Checking</span></td>
+                            <td style="font-size:0.78rem;color:var(--text-muted);">Feb 15, 2026</td>
+                            <td><span class="note-text">Website project payment</span></td>
+                            <td style="text-align:right;"><span class="balance-income">+$850.00</span></td>
+                        </tr>
+                        <tr>
+                            <td style="color:var(--text-light);font-size:0.72rem;">41</td>
+                            <td><span class="cat-badge cat-util"><i class="bi bi-lightning-charge-fill"></i>
+                                    Utilities</span></td>
+                            <td><span class="method-chip">Chase Checking</span></td>
+                            <td style="font-size:0.78rem;color:var(--text-muted);">Feb 14, 2026</td>
+                            <td><span class="note-text">Electric + Internet bill</span></td>
+                            <td style="text-align:right;"><span class="balance-expense">-$120.00</span></td>
+                        </tr>
+                        <tr>
+                            <td style="color:var(--text-light);font-size:0.72rem;">40</td>
+                            <td><span class="cat-badge cat-shop"><i class="bi bi-bag-fill"></i> Shopping</span></td>
+                            <td><span class="method-chip">Cash</span></td>
+                            <td style="font-size:0.78rem;color:var(--text-muted);">Feb 13, 2026</td>
+                            <td><span class="note-text">New sneakers — Nike</span></td>
+                            <td style="text-align:right;"><span class="balance-expense">-$160.00</span></td>
+                        </tr>
+                        <tr>
+                            <td style="color:var(--text-light);font-size:0.72rem;">39</td>
+                            <td><span class="cat-badge cat-entert"><i class="bi bi-play-circle-fill"></i>
+                                    Entertainment</span></td>
+                            <td><span class="method-chip">Savings</span></td>
+                            <td style="font-size:0.78rem;color:var(--text-muted);">Feb 12, 2026</td>
+                            <td><span class="note-text">Netflix + Spotify</span></td>
+                            <td style="text-align:right;"><span class="balance-expense">-$28.00</span></td>
+                        </tr>
+                        <tr>
+                            <td style="color:var(--text-light);font-size:0.72rem;">38</td>
+                            <td><span class="cat-badge cat-food"><i class="bi bi-cup-hot-fill"></i> Food</span></td>
+                            <td><span class="method-chip">Cash</span></td>
+                            <td style="font-size:0.78rem;color:var(--text-muted);">Feb 11, 2026</td>
+                            <td><span class="note-text">Coffee + lunch meeting</span></td>
+                            <td style="text-align:right;"><span class="balance-expense">-$22.50</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pagination -->
+            <div class="pagination-bar">
+                <div class="pagination-info">Page 1 of 5 · 47 total records</div>
+                <div class="d-flex gap-1">
+                    <button class="page-btn"><i class="bi bi-chevron-left"></i></button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn">5</button>
+                    <button class="page-btn"><i class="bi bi-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

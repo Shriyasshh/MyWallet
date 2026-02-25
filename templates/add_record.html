@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}MyWallet | Add Record{% endblock %}
+
+{% block content-head %}
+<link rel="stylesheet" href="{% static 'css/add_record.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="container-xl" style="padding-bottom: 4rem;">
+
+    <!-- Breadcrumb -->
+    <!-- <div class="breadcrumb-bar fade-up">
+    <a href="index.html">Dashboard</a>
+    <span class="sep">›</span>
+    <span class="current">Add Record</span>
+  </div> -->
+
+    <!-- Header -->
+    <div style="padding: 1.25rem 0 2rem;" class="fade-up">
+        <div class="page-label">Transactions</div>
+        <h1 class="page-title">Add New Record</h1>
+    </div>
+
+    <!-- Centred, max-width form column -->
+    <div style="max-width: 860px;">
+    <form method="post">
+    {% csrf_token %}
+
+        <!-- ① Transaction Type -->
+        <div class="type-tab-row fade-up">
+            <div class="type-tab expense active" id="tab-expense" onclick="selectType('expense')">
+                <span class="type-tab-icon">💸</span>
+                <span class="type-tab-label">Expense</span>
+            </div>
+            <div class="type-tab income" id="tab-income" onclick="selectType('income')">
+                <span class="type-tab-icon">💰</span>
+                <span class="type-tab-label">Income</span>
+            </div>
+            <div class="type-tab transfer" id="tab-transfer" onclick="selectType('transfer')">
+                <span class="type-tab-icon">🔄</span>
+                <span class="type-tab-label">Transfer</span>
+            </div>
+            <input type="hidden" name="payment_type" id="paymentTypeInput" value="expense">
+        </div>
+
+
+        <!-- ② Amount -->
+        <div class="form-card fade-up">
+            <div class="form-card-title"><i class="bi bi-cash-stack"></i> Amount</div>
+            <div class="amount-wrapper">
+                <span class="amount-prefix">$</span>
+                <input class="amount-input expense" id="amountInput" name="amount" type="number" placeholder="0.00"
+                    step="0.01" />
+            </div>
+
+        </div>
+
+        <!-- ③ Category -->
+        <div class="form-card fade-up">
+            <div class="form-card-title"><i class="bi bi-grid-3x3-gap-fill"></i> Category</div>
+            <div class="cat-grid" id="catGrid"></div>
+            <input type="hidden" name="category" id="categoryInput">
+        </div>
+
+        <!-- ④ Transaction Details -->
+        <div class="form-card fade-up">
+            <div class="form-card-title"><i class="bi bi-info-circle-fill"></i> Transaction Details</div>
+
+            <div class="f-row">
+                <div class="f-group">
+                    <label class="f-label">Date <span style="color:var(--red);">*</span></label>
+                    <input class="f-input" type="date" id="dateInput" name="date" />
+                </div>
+                <div class="f-group">
+                    <label class="f-label">Time</label>
+                    <input class="f-input" type="time" id="timeInput" name="time" />
+                </div>
+            </div>
+
+            <!-- Single account (expense / income) -->
+            <div class="f-group" id="accountSection">
+                <label class="f-label">Account <span style="color:var(--red);">*</span></label>
+                <select class="f-select" name="account">
+                    <option value="">Select account…</option>
+                    {% for account in acc %}
+                    <option value="{{ account.id }}">{{ account.accountName }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- From / To (transfer only) -->
+            <div class="f-row" id="transferAccounts" style="display:none;">
+                <div class="f-group">
+                    <label class="f-label">From Account <span style="color:var(--red);">*</span></label>
+                    <select class="f-select" name="from_account">
+                        <option value="">Select…</option>
+                        {% for account in acc %}
+                        <option value="{{ account.id }}">{{ account.accountName }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="f-group">
+                    <label class="f-label">To Account <span style="color:var(--red);">*</span></label>
+                    <select class="f-select" name="to_account">
+                        <option value="">Select…</option>
+                        {% for account in acc %}
+                        <option value="{{ account.id }}">
+                            {{ account.accountName }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="f-group">
+                <label class="f-label">Note </label>
+                <textarea class="f-input" rows="2" style="resize:none;" name="note"
+                    placeholder="Any additional details…"></textarea>
+            </div>
+
+            <!-- <div class="f-row">
+                
+                <div class="f-group">
+                    <label class="f-label">Tags (optional)</label>
+                    <input class="f-input" type="text" placeholder="e.g. groceries, work — comma separated" />
+                </div>
+            </div> -->
+
+            <div class="f-group">
+                <label class="f-label">Payee / Description <span style="color:var(--red);">*</span></label>
+                <input class="f-input" type="text" id="descInput" name="payee"
+                    placeholder="e.g. Whole Foods Market, Netflix, Salary…" />
+            </div>
+        </div>
+
+        <!-- ⑤ Recurring -->
+        <!-- <div class="form-card fade-up">
+            <div class="form-card-title"><i class="bi bi-arrow-repeat"></i> Recurring</div>
+            <div class="toggle-row">
+                <div>
+                    <div class="toggle-label">Repeat this transaction</div>
+                    <div class="toggle-sub">Automatically add this record on a schedule</div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox"
+                        onchange="document.getElementById('repeatOptions').style.display = this.checked ? 'block' : 'none'" />
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div id="repeatOptions" style="display:none; margin-top:1rem;">
+                <div style="font-size:0.75rem;font-weight:600;color:var(--text-main);margin-bottom:8px;">Repeat every
+                </div>
+                <div class="repeat-grid">
+                    <button class="repeat-opt" onclick="pickRepeat(this)">Daily</button>
+                    <button class="repeat-opt selected" onclick="pickRepeat(this)">Weekly</button>
+                    <button class="repeat-opt" onclick="pickRepeat(this)">Bi-weekly</button>
+                    <button class="repeat-opt" onclick="pickRepeat(this)">Monthly</button>
+                    <button class="repeat-opt" onclick="pickRepeat(this)">Quarterly</button>
+                    <button class="repeat-opt" onclick="pickRepeat(this)">Yearly</button>
+                </div>
+                <div class="f-row" style="margin-top:12px;">
+                    <div class="f-group">
+                        <label class="f-label">Start Date</label>
+                        <input class="f-input" type="date" />
+                    </div>
+                    <div class="f-group">
+                        <label class="f-label">End Date (optional)</label>
+                        <input class="f-input" type="date" />
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- ⑥ Attachment -->
+        <!-- <div class="form-card fade-up">
+            <div class="form-card-title"><i class="bi bi-paperclip"></i> Attachment</div>
+            <div class="attachment-zone" onclick="document.getElementById('fileInput').click()">
+                <input type="file" id="fileInput" style="display:none;" accept="image/*,.pdf" />
+                <i class="bi bi-cloud-upload"
+                    style="font-size:2rem;color:var(--text-light);display:block;margin-bottom:8px;"></i>
+                <div style="font-size:0.82rem;font-weight:600;color:var(--navy);">Upload receipt or invoice</div>
+                <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;">PNG, JPG, PDF — max 10 MB</div>
+            </div>
+        </div> -->
+
+        <!-- ⑦ Actions -->
+        <div class="d-flex gap-3 flex-wrap fade-up">
+            <button class="btn-submit" type="submit">
+                <i class="bi bi-check-circle-fill"></i> Save Record
+            </button>
+            <!-- <button class="btn-submit" onclick="submitRecord()">
+                <i class="bi bi-check-circle-fill"></i> Save Record
+            </button> -->
+            <!-- <button class="btn-submit navy" onclick="submitAndNew()">
+                <i class="bi bi-plus-circle"></i> Save &amp; Add Another
+            </button>
+            <button class="btn-cancel" onclick="window.location.href='index.html'">Cancel</button> -->
+        </div>
+    </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const categories = {
+        expense: [
+            { e: '🍔', n: 'Food' }, { e: '🚗', n: 'Transport' }, { e: '🏠', n: 'Rent' },
+            { e: '💊', n: 'Health' }, { e: '🛍️', n: 'Shopping' }, { e: '💡', n: 'Utilities' },
+            { e: '🎬', n: 'Entertainment' }, { e: '✈️', n: 'Travel' }, { e: '📚', n: 'Education' },
+            { e: '🐾', n: 'Pets' }, { e: '💅', n: 'Personal' }, { e: '🔧', n: 'Repair' },
+            { e: '💳', n: 'Debt' }, { e: '🎁', n: 'Gifts' }, { e: '📦', n: 'Other' },
+        ],
+        income: [
+            { e: '💼', n: 'Salary' }, { e: '💻', n: 'Freelance' }, { e: '📈', n: 'Investment' },
+            { e: '🏠', n: 'Rental' }, { e: '🎁', n: 'Gift' }, { e: '💰', n: 'Bonus' },
+            { e: '🔄', n: 'Refund' }, { e: '📦', n: 'Other' },
+        ],
+        transfer: [
+            { e: '🏦', n: 'Bank' }, { e: '💵', n: 'Cash' }, { e: '🔒', n: 'Savings' },
+            { e: '📈', n: 'Invest' }, { e: '📦', n: 'Other' },
+        ]
+    };
+
+    // Set today's date and current time
+    const now = new Date();
+    document.getElementById('dateInput').value = now.toISOString().split('T')[0];
+    document.getElementById('timeInput').value = now.toTimeString().slice(0, 5);
+
+    function selectType(type) {
+        ['expense', 'income', 'transfer'].forEach(t =>
+            document.getElementById('tab-' + t).classList.remove('active')
+        );
+        document.getElementById('tab-' + type).classList.add('active');
+        document.getElementById('amountInput').className = 'amount-input ' + type;
+        document.getElementById('accountSection').style.display = type === 'transfer' ? 'none' : '';
+        document.getElementById('transferAccounts').style.display = type === 'transfer' ? 'flex' : 'none';
+        document.getElementById('paymentTypeInput').value = type;
+        renderCategories(type);
+    }
+
+    function renderCategories(type) {
+        const grid = document.getElementById('catGrid');
+        grid.innerHTML = '';
+
+        categories[type].forEach(cat => {
+
+            const div = document.createElement('div');
+            div.className = 'cat-item';
+
+            div.innerHTML =
+                `<span class="cat-item-icon">${cat.e}</span>
+             <span class="cat-item-name">${cat.n}</span>`;
+
+            div.onclick = () => {
+
+                document.querySelectorAll('.cat-item')
+                    .forEach(c => c.classList.remove('selected'));
+
+                div.classList.add('selected');
+
+                document.getElementById('categoryInput').value = cat.n;
+            };
+
+            grid.appendChild(div);
+
+        });
+    }
+    function pickRepeat(btn) {
+        document.querySelectorAll('.repeat-opt').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    function submitRecord() {
+        const amt = parseFloat(document.getElementById('amountInput').value);
+        if (!amt || amt <= 0) {
+            const inp = document.getElementById('amountInput');
+            inp.style.borderColor = 'var(--red)';
+            inp.focus();
+            setTimeout(() => inp.style.borderColor = '', 2000);
+            return;
+        }
+        window.location.href = 'index.html';
+    }
+
+    function submitAndNew() {
+        document.getElementById('amountInput').value = '';
+        document.getElementById('descInput').value = '';
+        document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('selected'));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Init
+    renderCategories('expense');
+</script>
+
+{% endblock %}

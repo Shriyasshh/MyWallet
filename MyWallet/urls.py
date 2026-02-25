@@ -23,6 +23,9 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('accounts/',include('accounts.urls')),
 
+    # TRANSACTIONS
+    path('transactions/',include('transaction.urls')),
+
 
 
     

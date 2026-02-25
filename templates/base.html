@@ -44,7 +44,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-pill {% if request.path == '/transactions' %} active{% endif %}" href="#" id="nav-transactions"
+                        <a class="nav-link nav-link-pill {% if request.path == '/transactions' %} active{% endif %}" href="{% url 'transactions' %}" id="nav-transactions"
                             onclick="showPage('transactions', this); return false;">
                             <i class="bi bi-list-ul me-1"></i>Transactions
                         </a>
@@ -56,7 +56,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-pill" href="#"
+                        <a class="nav-link nav-link-pill" href="{% url 'add_record' %}"
                             style="background:var(--emerald);color:#fff!important;border-color:var(--emerald);">
                             <i class="bi bi-plus me-1"></i>Add Record
                         </a>

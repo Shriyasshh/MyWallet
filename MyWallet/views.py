@@ -16,4 +16,3 @@ def home(request):
         'currency': currency,
     }
     return render(request, 'home.html',context)
-
