@@ -1,11 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from .models import AddAccount
+from .forms import AddAccountForm
 
 # Create your views here.
 
-# @login_required
+@login_required
 def accounts(request):
     # acc = AddAccount.objects.filter(user=request.user)
     acc = AddAccount.objects.all()
@@ -18,5 +19,18 @@ def accounts(request):
     }
     return render(request, 'accounts.html',context)
 
+@login_required
 def add_account(request):
-    return render(request, 'add_account.html')
+    form = AddAccountForm()
+    if request.method =='POST':
+        form = AddAccountForm(request.POST)
+        if form.is_valid():
+            account = form.save(commit=False)
+            account.user = request.user
+            account.save()
+            return redirect('accounts')
+        else:
+            print("Form errors:", form.errors)
+    
+    context = {'form': form}
+    return render(request, 'add_account.html',context)

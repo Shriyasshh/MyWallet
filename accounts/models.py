@@ -57,6 +57,6 @@ class AddAccount(models.Model):
 
 
     def __str__(self):
-        return f"{self.accountName} -  {self.currency} {self.accountBalance}"
+        return self.accountName
     
     

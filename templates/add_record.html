@@ -50,7 +50,7 @@
         <div class="form-card fade-up">
             <div class="form-card-title"><i class="bi bi-cash-stack"></i> Amount</div>
             <div class="amount-wrapper">
-                <span class="amount-prefix">$</span>
+                <span class="amount-prefix">{{currency}}</span>
                 <input class="amount-input expense" id="amountInput" name="amount" type="number" placeholder="0.00"
                     step="0.01" />
             </div>
@@ -114,9 +114,9 @@
                 </div>
             </div>
             <div class="f-group">
-                <label class="f-label">Note </label>
-                <textarea class="f-input" rows="2" style="resize:none;" name="note"
-                    placeholder="Any additional details…"></textarea>
+                <label class="f-label">Note<span style="color:var(--red);">*</span></label>
+                <textarea class="f-input" style="resize:none;" name="note"
+                    placeholder="e.g. Whole Foods Market, Netflix, Salary…"></textarea>
             </div>
 
             <!-- <div class="f-row">
@@ -128,9 +128,8 @@
             </div> -->
 
             <div class="f-group">
-                <label class="f-label">Payee / Description <span style="color:var(--red);">*</span></label>
-                <input class="f-input" type="text" id="descInput" name="payee"
-                    placeholder="e.g. Whole Foods Market, Netflix, Salary…" />
+                <label class="f-label">Payee</label>
+                <input class="f-input" type="text" id="descInput" name="payee"/>
             </div>
         </div>
 

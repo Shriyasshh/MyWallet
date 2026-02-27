@@ -21,6 +21,15 @@ Account {% endblock %} {% block content-head %}
     <div class="row g-4">
         <!-- LEFT: FORM -->
         <div class="col-lg-7">
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>Error:</strong>
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
             <form action="" method="post">
                 {% csrf_token %}
 
@@ -106,7 +115,7 @@ Account {% endblock %} {% block content-head %}
                 <input
                     type="hidden"
                     name="accountType"
-                    id="accounttype"
+                    id="accountType"
                     value="Cash"
                 />
 
@@ -130,6 +139,9 @@ Account {% endblock %} {% block content-head %}
                             name="accountName"
                             oninput="updatePreview()"
                         />
+                        {% if form.accountName.errors %}
+                            <small style="color: var(--red);">{{ form.accountName.errors.0 }}</small>
+                        {% endif %}
                     </div>
 
                     <div class="f-row">
@@ -146,9 +158,14 @@ Account {% endblock %} {% block content-head %}
                                     id="accountBalance"
                                     name="accountBalance"
                                     placeholder="0.00"
+                                    step="0.01"
+                                    min="0"
                                     oninput="updatePreview()"
                                 />
                             </div>
+                            {% if form.accountBalance.errors %}
+                                <small style="color: var(--red);">{{ form.accountBalance.errors.0 }}</small>
+                            {% endif %}
                         </div>
                         <div class="f-group">
                             <label class="f-label">Currency</label>
@@ -332,7 +349,7 @@ Account {% endblock %} {% block content-head %}
                     <!-- Hidden input to store selected icon -->
                     <input
                         type="hidden"
-                        name="Icon"
+                        name="icon"
                         id="accountIcon"
                         value="bi bi-cash-stack"
                     />
@@ -606,7 +623,7 @@ Account {% endblock %} {% block content-head %}
         element.classList.add("selected");
 
         // Update both global and hidden input
-        document.getElementById("accounttype").value = type;
+        document.getElementById("accountType").value = type;
         document.getElementById("previewType").textContent = type;
     }
 

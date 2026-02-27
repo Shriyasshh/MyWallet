@@ -79,4 +79,4 @@ class Transaction(models.Model):
 
 
     def __str__(self):
-        return f"{self.payment_type} - {self.amount}"
+        return self.payment_type
