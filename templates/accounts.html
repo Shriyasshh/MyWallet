@@ -1,5 +1,5 @@
-{% extends "base.html" %} {% block title %}MyWallet | Accounts {% endblock %} 
-{% block content-head %} {% endblock %} 
+{% extends "base.html" %} {% block title %}MyWallet | Accounts {% endblock %}
+{% block content-head %} {% endblock %}
 {% block content %}
 <div id="page-accounts" class="page page-content">
 	<div class="container-xl">
@@ -92,24 +92,28 @@
                                 font-weight: 800;
                                 color: var(--emerald);
                             ">
-							{{acc.get_currency_display}} {{acc.accountBalance}}
+							{{currency}} {{acc.accountBalance}}
 						</div>
 					</div>
 					<!-- Transactions -->
+
+					{% if acc.recent_txns %}
+					{% for txn in acc.recent_txns %}
+
 					<div class="account-mini-txn">
-						<span style="color: var(--text-muted)">Grocery shopping</span><span
-							class="balance-expense">-$87.50</span>
+						<span style="color: var(--text-muted)">{{ txn.note|default:txn.category }}</span>
+						<span class="{% if txn.payment_type == 'income' %}balance-income{% else %}balance-expense{% endif %}">
+							{{acc.get_currency_display}}{{ txn.amount }}</span>
 					</div>
+
+					{% endfor %}
+					{% else %}
 					<div class="account-mini-txn">
-						<span style="color: var(--text-muted)">Coffee + lunch</span><span
-							class="balance-expense">-$22.50</span>
+						<span style="color: var(--text-muted)">No recent transactions</span>
 					</div>
-					<div class="account-mini-txn">
-						<span style="color: var(--text-muted)">Cash withdrawal</span><span
-							class="balance-expense">-$100.00</span>
-					</div>
+					{% endif %}
 					<div style="padding: 10px 16px; text-align: right">
-						<a href="#" style="
+						<a href="{% url 'transaction' acc.slug  %}" style="
                                 font-size: 0.72rem;
                                 color: var(--emerald);
                                 font-weight: 600;

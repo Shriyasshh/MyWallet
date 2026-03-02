@@ -2,15 +2,22 @@ from django.shortcuts import render,redirect
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from .models import AddAccount
+from transaction.models import Transaction
 from .forms import AddAccountForm
+from django.template.defaultfilters import slugify
+
 
 # Create your views here.
 
 @login_required
 def accounts(request):
-    # acc = AddAccount.objects.filter(user=request.user)
-    acc = AddAccount.objects.all()
+    acc = AddAccount.objects.filter(user=request.user)
     total_balance = acc.aggregate(total = Sum('accountBalance'))['total'] or 0
+
+    # attach recent transactions for each account (3 most recent)
+    for a in acc:
+        a.recent_txns = list(Transaction.objects.filter(user=request.user, account=a).order_by('-date', '-time')[:3])
+
     currency = acc.first().get_currency_display() if acc.exists() else ''
     context= {
         'acc': acc,
@@ -21,7 +28,6 @@ def accounts(request):
 
 @login_required
 def add_account(request):
-    form = AddAccountForm()
     if request.method =='POST':
         form = AddAccountForm(request.POST)
         if form.is_valid():
@@ -30,7 +36,7 @@ def add_account(request):
             account.save()
             return redirect('accounts')
         else:
-            print("Form errors:", form.errors)
+            form = AddAccountForm(request.POST)
     
     context = {'form': form}
     return render(request, 'add_account.html',context)

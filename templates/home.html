@@ -125,8 +125,7 @@
                     <div class="section-label">Overview</div>
                     <div class="section-title mb-0">Last Records</div>
                 </div>
-                <a href="#"
-                    onclick="showPage('transactions', document.getElementById('nav-transactions')); return false;"
+                <a href="{% url 'transactions' %}"
                     style="font-size:0.78rem;color:var(--emerald);font-weight:600;text-decoration:none;">
                     See All <i class="bi bi-arrow-right"></i>
                 </a>
@@ -146,23 +145,29 @@
                     <table class="records-table">
                         <thead>
                             <tr>
-                                <th>Category</th>
-                                <th>Method</th>
                                 <th>Date</th>
+                                <th>Method</th>
+                                <th>Transfer to</th>
+                                <th>Category</th>
                                 <th>Note</th>
                                 <th style="text-align:right;">Balance</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><span class="cat-badge cat-salary"><i class="bi bi-briefcase-fill"></i>
-                                        Salary</span></td>
-                                <td><span class="method-chip">Chase Checking</span></td>
-                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 20</td>
-                                <td><span class="note-text">Monthly salary deposit</span></td>
-                                <td style="text-align:right;"><span class="balance-income">+$5,200.00</span></td>
-                            </tr>
-                            <tr>
+                            {% for tra in transactions %}
+                        <tr>
+                            <!-- <td style="color:var(--text-light);font-size:0.72rem;">47</td> -->
+                            <td style="font-size:0.78rem;color:var(--text-muted);">{{tra.date}}</td>
+                            <td><span class="method-chip">{{tra.account}}</span></td>
+                            <td><span class="method-chip">{% if tra.payment_type == 'transfer' %}{{tra.to_account.accountName}}{% else %}-{% endif %}</span></td>
+                            <td><span class="cat-badge ">{{tra.category}}</span></td>
+                            <!-- <td><span class="cat-badge cat-salary"><i class="bi bi-briefcase-fill"></i>{{tra.category}}</span></td> -->
+                            <td><span class="note-text">{{tra.note}}</span></td>
+                            <td style="text-align:right;"><span class="{% if tra.payment_type == 'income' %}balance-income{% else %}balance-expense{% endif %}">{% if tra.payment_type == 'income' %}+{% else %}-{% endif %}₹{{tra.currency}}{{tra.amount}}</span></td>
+                        </tr>
+                        {% endfor %} 
+                        
+                            <!-- <tr>
                                 <td><span class="cat-badge cat-rent"><i class="bi bi-house-fill"></i> Rent</span></td>
                                 <td><span class="method-chip">Chase Checking</span></td>
                                 <td style="font-size:0.78rem;color:var(--text-muted);">Feb 19</td>
@@ -229,7 +234,7 @@
                                 <td style="font-size:0.78rem;color:var(--text-muted);">Feb 11</td>
                                 <td><span class="note-text">Coffee + lunch meeting</span></td>
                                 <td style="text-align:right;"><span class="balance-expense">-$22.50</span></td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                 </div>

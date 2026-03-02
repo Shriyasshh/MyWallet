@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from autoslug import AutoSlugField
 
 # Create your models here.
 
@@ -40,6 +41,7 @@ class AddAccount(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     accountType = models.CharField(max_length=50,choices = ACCOUNT_CHOICES, default='Cash')
     accountName = models.CharField(max_length=50)
+    slug = AutoSlugField(populate_from='accountName',unique=True,null = True,blank = True)
     accountBalance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     currency = models.CharField(
     max_length=10,

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %} {% endblock %}
+
+{% block content-head %}
+
+
+
+{% endblock %}
+
+{% block content %}
+<div id="page-transactions" class="page page-content">
+    <div class="container-xl">
+
+        <div class="d-flex align-items-center justify-content-between mb-4 fade-in">
+            <div>
+                <div class="section-label">History</div>
+                <div class="section-title mb-0">Account : {{account| upper}}</div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar fade-in">
+            <select class="filter-select">
+                <option>All Dates</option>
+                <option>This Month</option>
+                <option>Last Month</option>
+                <option>Last 3 Months</option>
+                <option>This Year</option>
+            </select>
+            <select class="filter-select">
+                <option>All Categories</option>
+                <option>Food</option>
+                <option>Salary</option>
+                <option>Rent</option>
+                <option>Transport</option>
+                <option>Health</option>
+                <option>Shopping</option>
+            </select>
+            <select class="filter-select">
+                <option>All Accounts</option>
+                <option>Cash</option>
+                <option>Chase Checking</option>
+                <option>Savings</option>
+                <option>Investment</option>
+            </select>
+            <select class="filter-select">
+                <option>All Types</option>
+                <option>Income</option>
+                <option>Expense</option>
+            </select>
+            <div class="search-wrap">
+                <i class="bi bi-search"></i>
+                <input class="search-input" type="text" placeholder="Search transactions…" />
+            </div>
+            <button class="export-btn"><i class="bi bi-download"></i> Export CSV</button>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="table-card fade-in">
+            <div class="table-card-header">
+                <div>
+                    <p class="table-card-title">Transaction History</p>
+                    <!-- <p class="table-card-sub">Showing 1–10 of 47 records</p> -->
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="records-table">
+                    <thead>
+                        <tr>
+                            <!-- <th>#</th> -->
+                            <th>Date</th>
+                            <th>Method</th>
+                            <th>Transfer to</th>
+                            <th>Category</th>
+                            <th>Note</th>
+                            <th style="text-align:right;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tra in trans %}
+                        <tr>
+                            <!-- <td style="color:var(--text-light);font-size:0.72rem;">47</td> -->
+                            <td style="font-size:0.78rem;color:var(--text-muted);">{{tra.date}}</td>
+                            <td><span class="method-chip">{{tra.account}}</span></td>
+                            <td><span class="method-chip">{% if tra.payment_type == 'transfer' %}{{tra.to_account.accountName}}{% else %}-{% endif %}</span></td>
+                            <td><span class="cat-badge ">{{tra.category}}</span></td>
+                            <!-- <td><span class="cat-badge cat-salary"><i class="bi bi-briefcase-fill"></i>{{tra.category}}</span></td> -->
+                            <td><span class="note-text">{{tra.note}}</span></td>
+                            <td style="text-align:right;"><span class="{% if tra.payment_type == 'income' %}balance-income{% else %}balance-expense{% endif %}">{% if tra.payment_type == 'income' %}+{% else %}-{% endif %}₹{{tra.currency}}{{tra.amount}}</span></td>
+                        </tr>
+                        {% endfor %}                      
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-bar">
+                <div class="pagination-info">Page 1 of 5 · 47 total records</div>
+                <div class="d-flex gap-1">
+                    <button class="page-btn"><i class="bi bi-chevron-left"></i></button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn">5</button>
+                    <button class="page-btn"><i class="bi bi-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

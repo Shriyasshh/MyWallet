@@ -5,12 +5,18 @@ from django.contrib.auth.decorators import login_required
 import decimal
 # Create your views here.
 
+@login_required
 def transactions(request):
-    return render(request, 'transactions.html')
+    transactions = Transaction.objects.filter(user=request.user).order_by('-date')
+
+    context = {
+        'transactions': transactions
+    }
+    return render(request, 'transactions.html',context)
 
 @login_required
 def add_record(request):
-
+    
     acc = AddAccount.objects.filter(user=request.user)
     currency = acc.first().get_currency_display() if acc.exists() else ''
 
@@ -46,3 +52,12 @@ def add_record(request):
     }
 
     return render(request, 'add_record.html', context)
+
+def transaction(request,pk):
+    account = AddAccount.objects.get(slug=pk, user=request.user)
+    trans = Transaction.objects.filter(user=request.user,account=account).order_by('-date')
+    context ={
+        'account': account,
+        'trans': trans
+    }
+    return render(request, 'transaction.html',context)
