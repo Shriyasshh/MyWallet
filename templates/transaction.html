@@ -20,41 +20,43 @@
         </div>
 
         <!-- Filter Bar -->
-        <div class="filter-bar fade-in">
-            <select class="filter-select">
-                <option>All Dates</option>
-                <option>This Month</option>
-                <option>Last Month</option>
-                <option>Last 3 Months</option>
-                <option>This Year</option>
-            </select>
-            <select class="filter-select">
-                <option>All Categories</option>
-                <option>Food</option>
-                <option>Salary</option>
-                <option>Rent</option>
-                <option>Transport</option>
-                <option>Health</option>
-                <option>Shopping</option>
-            </select>
-            <select class="filter-select">
-                <option>All Accounts</option>
-                <option>Cash</option>
-                <option>Chase Checking</option>
-                <option>Savings</option>
-                <option>Investment</option>
-            </select>
-            <select class="filter-select">
-                <option>All Types</option>
-                <option>Income</option>
-                <option>Expense</option>
-            </select>
-            <div class="search-wrap">
-                <i class="bi bi-search"></i>
-                <input class="search-input" type="text" placeholder="Search transactions…" />
+        <form method="GET">
+            <div class="filter-bar fade-in">
+
+                <select name="date" class="filter-select">
+                    <option value="">All Dates</option>
+                    <option value="7days" {% if request.GET.date == '7days' %}selected{% endif %}>Last 7 Days</option>
+                    <option value="month" {% if request.GET.date == 'month' %}selected{% endif %}>This Month</option>
+                    <option value="30days" {% if request.GET.date == '30days' %}selected{% endif %}>Last 30 Days</option>
+                    <option value="3months" {% if request.GET.date == '3months' %}selected{% endif %}>Last 3 Months</option>
+                    <option value="year" {% if request.GET.date == 'year' %}selected{% endif %}>This Year</option>
+                </select>
+
+                <select name="category" class="filter-select">
+                    <option value="">All Categories</option>
+                    {% for value, label in categories %}
+                    <option value="{{ value }}" {% if request.GET.category == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+
+                <select name="type" class="filter-select">
+                    <option value="">All Types</option>
+                    <option value="income" {% if request.GET.type == 'income' %}selected{% endif %}>Income</option>
+                    <option value="expense" {% if request.GET.type == 'expense' %}selected{% endif %}>Expense</option>
+                    <option value="transfer" {% if request.GET.type == 'transfer' %}selected{% endif %}>Transfer</option>
+                </select>
+
+                <div class="search-wrap">
+                    <i class="bi bi-search"></i>
+                    <input name="search" class="search-input" type="text" placeholder="Search transactions…" value="{{ request.GET.search }}" />
+                </div>
+
+                <button type="submit" class="filter-btn">
+                    <i class="bi bi-funnel-fill"></i> Apply
+                </button>
+
             </div>
-            <button class="export-btn"><i class="bi bi-download"></i> Export CSV</button>
-        </div>
+        </form>
 
         <!-- Transactions Table -->
         <div class="table-card fade-in">
@@ -78,7 +80,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for tra in trans %}
+                        {% for tra in transactions %}
                         <tr>
                             <!-- <td style="color:var(--text-light);font-size:0.72rem;">47</td> -->
                             <td style="font-size:0.78rem;color:var(--text-muted);">{{tra.date}}</td>

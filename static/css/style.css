@@ -646,6 +646,19 @@ body {
 .filter-select:focus {
     border-color: var(--emerald);
 }
+.filter-btn{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:6px 14px;
+    border-radius:6px;
+    font-size:0.8rem;
+    cursor:pointer;
+}
+
+.filter-btn:hover{
+    background:#1d4ed8;
+}
 
 .search-input {
     border: 1px solid var(--border);
@@ -1393,3 +1406,4 @@ body {
         flex-direction: column;
     }
 }
+

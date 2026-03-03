@@ -1,16 +1,67 @@
+from datetime import date,timedelta
 from django.shortcuts import render,redirect
+from django.urls import reverse
 from accounts.models import AddAccount
 from transaction.models import Transaction
 from django.contrib.auth.decorators import login_required
 import decimal
+from django.db.models import Q
 # Create your views here.
 
 @login_required
 def transactions(request):
     transactions = Transaction.objects.filter(user=request.user).order_by('-date')
+    accounts= AddAccount.objects.filter(user=request.user)
 
+    # Filters
+    date_filter = request.GET.get('date')
+    category = request.GET.get('category')
+    account_id = request.GET.get('account')
+    payment_type = request.GET.get('type')
+    search = request.GET.get('search')
+
+    
+    if category:
+        transactions = transactions.filter(category=category)
+
+    # Filter by account if selected
+    if account_id:        
+        try:
+            account = AddAccount.objects.get(id=account_id, user=request.user)
+            transactions = transactions.filter(account=account)
+        except AddAccount.DoesNotExist:
+            pass
+
+    if payment_type:
+        transactions = transactions.filter(payment_type=payment_type)
+
+    today = date.today()
+
+    if date_filter == "month":
+        transactions = transactions.filter(date__month=today.month)
+    elif date_filter == "7days":
+        transactions = transactions.filter(date__gte=today - timedelta(days=7))
+    elif date_filter == "30days":
+        transactions = transactions.filter(date__gte=today - timedelta(days=30))
+    elif date_filter == "3months":
+        transactions = transactions.filter(date__gte=today - timedelta(days=90))
+    elif date_filter == "year":
+        transactions = transactions.filter(date__year=today.year)
+    
+    if search:
+        transactions = transactions.filter(Q(note__icontains=search) |Q(payee__icontains=search)
+        )
+
+    
     context = {
-        'transactions': transactions
+        'accounts': accounts,
+        'transactions': transactions,
+        'categories': Transaction.CATEGORY_CHOICES,
+        'selected_date': date_filter,
+        'selected_category': category,
+        'selected_account': account_id,
+        'selected_type': payment_type,
+        'search_query': search,
     }
     return render(request, 'transactions.html',context)
 
@@ -53,11 +104,54 @@ def add_record(request):
 
     return render(request, 'add_record.html', context)
 
+@login_required
 def transaction(request,pk):
     account = AddAccount.objects.get(slug=pk, user=request.user)
-    trans = Transaction.objects.filter(user=request.user,account=account).order_by('-date')
+    transactions = Transaction.objects.filter(user=request.user,account=account).order_by('-date')
+    accounts= AddAccount.objects.filter(user=request.user)
+
+    date_filter = request.GET.get('date')
+    category = request.GET.get('category')
+    account_id = request.GET.get('account')
+    print(account_id)
+    payment_type = request.GET.get('type')
+    search = request.GET.get('search')
+
+    
+    if category:
+        transactions = transactions.filter(category=category)
+
+    if payment_type:
+        transactions = transactions.filter(payment_type=payment_type)
+
+    today = date.today()
+
+    if date_filter == "month":
+        transactions = transactions.filter(date__month=today.month)
+    elif date_filter == "7days":
+        transactions = transactions.filter(date__gte=today - timedelta(days=7))
+    elif date_filter == "30days":
+        transactions = transactions.filter(date__gte=today - timedelta(days=30))
+    elif date_filter == "3months":
+        transactions = transactions.filter(date__gte=today - timedelta(days=90))
+    elif date_filter == "year":
+        transactions = transactions.filter(date__year=today.year)
+    
+    if search:
+        transactions = transactions.filter(Q(note__icontains=search) |Q(payee__icontains=search)
+        ) 
+
     context ={
+        # For tractions display from which account
         'account': account,
-        'trans': trans
+        # For filter bar
+        'accounts': accounts,
+        'transactions': transactions,
+        'categories': Transaction.CATEGORY_CHOICES,
+        'selected_date': date_filter,
+        'selected_category': category,
+        'selected_account': account_id,
+        'selected_type': payment_type,
+        'search_query': search,
     }
     return render(request, 'transaction.html',context)
