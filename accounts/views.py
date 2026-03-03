@@ -35,8 +35,8 @@ def add_account(request):
             account.user = request.user
             account.save()
             return redirect('accounts')
-        else:
-            form = AddAccountForm(request.POST)
+    else:
+        form = AddAccountForm()
     
     context = {'form': form}
     return render(request, 'add_account.html',context)

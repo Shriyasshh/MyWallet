@@ -6,6 +6,7 @@ from transaction.models import Transaction
 from django.contrib.auth.decorators import login_required
 import decimal
 from django.db.models import Q
+from django.core.paginator import Paginator
 # Create your views here.
 
 @login_required
@@ -52,7 +53,10 @@ def transactions(request):
         transactions = transactions.filter(Q(note__icontains=search) |Q(payee__icontains=search)
         )
 
-    
+    paginator = Paginator(transactions, 15)   # 10 records per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'accounts': accounts,
         'transactions': transactions,
@@ -62,6 +66,8 @@ def transactions(request):
         'selected_account': account_id,
         'selected_type': payment_type,
         'search_query': search,
+        'page_obj': page_obj,
+        'total_records': paginator.count,
     }
     return render(request, 'transactions.html',context)
 
@@ -140,6 +146,11 @@ def transaction(request,pk):
     if search:
         transactions = transactions.filter(Q(note__icontains=search) |Q(payee__icontains=search)
         ) 
+    
+    # Pagination
+    paginator = Paginator(transactions, 15)   # 10 records per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     context ={
         # For tractions display from which account
@@ -153,5 +164,7 @@ def transaction(request,pk):
         'selected_account': account_id,
         'selected_type': payment_type,
         'search_query': search,
+        'page_obj': page_obj,
+        'total_records': paginator.count,
     }
     return render(request, 'transaction.html',context)
