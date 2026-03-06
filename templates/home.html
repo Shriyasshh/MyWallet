@@ -10,9 +10,8 @@
         <div class="greeting-banner fade-in">
             <div class="row align-items-center">
                 <div class="col-md-7">
-                    <p class="mb-1" style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-weight:500;">FRIDAY, FEB
-                        20, 2026</p>
-                    <h2 class="greeting-name">Good morning, {{user}}! 👋</h2>
+                    <p class="mb-1" style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-weight:500;">{{date}}</p>
+                    <h2 class="greeting-name">Welcome, {{user}}! 👋</h2>
                     <p class="greeting-sub">Your finances are looking healthy this month. Keep it up.</p>
                 </div>
                 <div class="col-md-5 net-worth-box mt-3 mt-md-0">
@@ -28,7 +27,7 @@
             <div class="col-6 col-md-3">
                 <div class="stat-mini-card">
                     <div class="stat-mini-label">Monthly Income</div>
-                    <div class="stat-mini-value" style="color:var(--emerald);">$5,200</div>
+                    <div class="stat-mini-value" style="color:var(--emerald);">{{currency}} {{income}}</div>
                     <div class="stat-mini-bar" style="background:var(--emerald-light);">
                         <div style="width:80%;height:100%;background:var(--emerald);border-radius:50px;"></div>
                     </div>
@@ -37,7 +36,7 @@
             <div class="col-6 col-md-3">
                 <div class="stat-mini-card">
                     <div class="stat-mini-label">Monthly Expenses</div>
-                    <div class="stat-mini-value" style="color:var(--red);">$3,120</div>
+                    <div class="stat-mini-value" style="color:var(--red);">{{currency}} {{expense}}</div>
                     <div class="stat-mini-bar" style="background:var(--red-light);">
                         <div style="width:60%;height:100%;background:var(--red);border-radius:50px;"></div>
                     </div>
@@ -46,7 +45,7 @@
             <div class="col-6 col-md-3">
                 <div class="stat-mini-card">
                     <div class="stat-mini-label">Savings Rate</div>
-                    <div class="stat-mini-value" style="color:var(--sky);">40%</div>
+                    <div class="stat-mini-value" style="color:var(--sky);">{{savings}}%</div>
                     <div class="stat-mini-bar" style="background:var(--sky-light);">
                         <div style="width:40%;height:100%;background:var(--sky);border-radius:50px;"></div>
                     </div>
@@ -55,7 +54,7 @@
             <div class="col-6 col-md-3">
                 <div class="stat-mini-card">
                     <div class="stat-mini-label">Transactions</div>
-                    <div class="stat-mini-value" style="color:var(--purple);">47</div>
+                    <div class="stat-mini-value" style="color:var(--purple);">{{trans_count}}</div>
                     <div class="stat-mini-bar" style="background:var(--purple-light);">
                         <div style="width:55%;height:100%;background:var(--purple);border-radius:50px;"></div>
                     </div>
@@ -105,8 +104,8 @@
             <div class="summary-pill">
                 <div class="pill-icon spend"><i class="bi bi-receipt"></i></div>
                 <div>
-                    <div class="pill-label">Spending (Feb)</div>
-                    <div class="pill-value spend">$3,120.00</div>
+                    <div class="pill-label">Spending ({{month}})</div>
+                    <div class="pill-value spend">{{currency}} {{expense}}</div>
                 </div>
             </div>
             <div class="summary-pill">
