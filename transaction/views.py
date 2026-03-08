@@ -119,7 +119,6 @@ def transaction(request,pk):
     date_filter = request.GET.get('date')
     category = request.GET.get('category')
     account_id = request.GET.get('account')
-    print(account_id)
     payment_type = request.GET.get('type')
     search = request.GET.get('search')
 
@@ -168,3 +167,7 @@ def transaction(request,pk):
         'total_records': paginator.count,
     }
     return render(request, 'transaction.html',context)
+
+@login_required
+def debt_manager(request):
+    return render(request, 'debt-manager.html')

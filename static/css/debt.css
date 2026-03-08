@@ -1,0 +1,820 @@
+/* ── BREADCRUMB ── */
+.breadcrumb-bar {
+    padding: 1rem 0 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.breadcrumb-bar a {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.breadcrumb-bar a:hover {
+    color: var(--emerald);
+}
+
+.breadcrumb-bar .sep {
+    color: var(--text-light);
+}
+
+.breadcrumb-bar .current {
+    color: var(--navy);
+    font-weight: 600;
+}
+
+/* ── PAGE HEADER ── */
+.page-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -0.3px;
+    margin: 0;
+}
+
+/* ── SUMMARY CARDS ── */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.sum-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    padding: 1.1rem 1.25rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.sum-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.sum-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.sum-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.sum-sub {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.sum-bar {
+    height: 3px;
+    border-radius: 50px;
+    margin-top: 10px;
+    background: var(--border);
+    overflow: hidden;
+}
+
+.sum-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+}
+
+/* ── VIEW TOGGLE ── */
+.view-toggle {
+    display: flex;
+    background: #F1F5F9;
+    border-radius: 10px;
+    padding: 4px;
+    gap: 2px;
+}
+
+.view-btn {
+    padding: 7px 16px;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.view-btn.active {
+    background: var(--card-bg);
+    color: var(--navy);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ── DEBT TYPE TABS (Borrowed / Lent) ── */
+.debt-type-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 2rem;
+}
+
+.debt-type-tab {
+    flex: 1;
+    padding: 16px 12px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: var(--card-bg);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.debt-type-tab:hover {
+    border-color: var(--text-light);
+}
+
+.debt-type-tab.borrowed.active {
+    border-color: var(--red);
+    background: var(--red-light);
+}
+
+.debt-type-tab.lent.active {
+    border-color: var(--emerald);
+    background: var(--emerald-light);
+}
+
+.debt-type-icon {
+    font-size: 1.6rem;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.debt-type-title {
+    font-size: 0.88rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+}
+
+.debt-type-sub {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+}
+
+.debt-type-tab.borrowed.active .debt-type-title {
+    color: var(--red);
+}
+
+.debt-type-tab.lent.active .debt-type-title {
+    color: var(--emerald);
+}
+
+.debt-type-tab:not(.active) .debt-type-title {
+    color: var(--navy);
+}
+
+/* ── FORM CARD ── */
+.form-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.form-card-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-card-title i {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: var(--emerald-light);
+    color: var(--emerald);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+/* ── INPUTS ── */
+.f-label {
+    font-size: 0.73rem;
+    font-weight: 600;
+    color: var(--text-main);
+    display: block;
+    margin-bottom: 6px;
+}
+
+.f-group {
+    margin-bottom: 1rem;
+}
+
+.f-row {
+    display: flex;
+    gap: 14px;
+}
+
+.f-row .f-group {
+    flex: 1;
+}
+
+.f-input {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 0.83rem;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-main);
+    background: #FAFCFF;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.f-input:focus {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    background: #fff;
+}
+
+.f-input::placeholder {
+    color: var(--text-light);
+}
+
+.f-select {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 0.83rem;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-main);
+    background: #FAFCFF;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+.f-select:focus {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* ── AMOUNT INPUT ── */
+.amount-wrapper {
+    position: relative;
+}
+
+.amount-prefix {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.amount-input {
+    width: 100%;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 16px 16px 38px;
+    font-size: 2rem;
+    font-weight: 800;
+    font-family: 'Poppins', sans-serif;
+    color: var(--navy);
+    background: #FAFCFF;
+    outline: none;
+    letter-spacing: -0.5px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.amount-input::placeholder {
+    color: #CBD5E1;
+}
+
+.amount-input.borrowed:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.08);
+}
+
+.amount-input.lent:focus {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.10);
+}
+
+/* ── TOGGLE ── */
+.toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid #F8FAFC;
+}
+
+.toggle-row:last-child {
+    border-bottom: none;
+}
+
+.toggle-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.toggle-sub {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.switch {
+    position: relative;
+    width: 38px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.slider::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    bottom: 3px;
+    left: 3px;
+    transition: 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.switch input:checked+.slider {
+    background: var(--emerald);
+}
+
+.switch input:checked+.slider::before {
+    transform: translateX(16px);
+}
+
+/* ── PRIORITY BADGE ── */
+.priority-grid {
+    display: flex;
+    gap: 8px;
+}
+
+.priority-opt {
+    flex: 1;
+    padding: 8px 6px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.72rem;
+    font-weight: 700;
+    transition: all 0.15s;
+    font-family: 'Poppins', sans-serif;
+    background: var(--card-bg);
+}
+
+.priority-opt:hover {
+    border-color: var(--text-light);
+}
+
+.priority-opt.selected-low {
+    border-color: var(--emerald);
+    background: var(--emerald-light);
+    color: #065F46;
+}
+
+.priority-opt.selected-medium {
+    border-color: var(--amber);
+    background: var(--amber-light);
+    color: #92400E;
+}
+
+.priority-opt.selected-high {
+    border-color: var(--red);
+    background: var(--red-light);
+    color: #991B1B;
+}
+
+/* ── BUTTONS ── */
+.btn-submit {
+    background: var(--emerald);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 26px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-submit:hover {
+    background: #059669;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+}
+
+.btn-cancel {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 22px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    border-color: var(--navy);
+    color: var(--navy);
+}
+
+/* ── DEBT LIST CARD ── */
+.list-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.list-header {
+    padding: 1.1rem 1.4rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.list-header-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.debt-item {
+    padding: 1rem 1.4rem;
+    border-bottom: 1px solid #F8FAFC;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: background 0.15s;
+    cursor: pointer;
+}
+
+.debt-item:last-child {
+    border-bottom: none;
+}
+
+.debt-item:hover {
+    background: #F8FAFC;
+}
+
+.debt-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.debt-avatar.borrowed {
+    background: linear-gradient(135deg, #EF4444, #F87171);
+}
+
+.debt-avatar.lent {
+    background: linear-gradient(135deg, #10B981, #34D399);
+}
+
+.debt-name {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.debt-meta {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin-top: 1px;
+}
+
+.debt-amount {
+    font-size: 0.95rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.debt-amount.borrowed {
+    color: var(--red);
+}
+
+.debt-amount.lent {
+    color: var(--emerald);
+}
+
+.debt-progress-wrap {
+    flex: 1;
+    min-width: 80px;
+    max-width: 130px;
+}
+
+.debt-progress-bar {
+    height: 5px;
+    border-radius: 50px;
+    background: var(--border);
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.debt-progress-fill {
+    height: 100%;
+    border-radius: 50px;
+}
+
+.debt-pct {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+}
+
+.debt-status {
+    font-size: 0.62rem;
+    padding: 3px 8px;
+    border-radius: 50px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-overdue {
+    background: var(--red-light);
+    color: #991B1B;
+}
+
+.status-upcoming {
+    background: var(--amber-light);
+    color: #92400E;
+}
+
+.status-ok {
+    background: var(--emerald-light);
+    color: #065F46;
+}
+
+.status-settled {
+    background: #F1F5F9;
+    color: var(--text-muted);
+}
+
+/* ── FILTER BAR ── */
+.filter-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+}
+
+.filter-chip {
+    padding: 5px 14px;
+    border-radius: 50px;
+    border: 1.5px solid var(--border);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    background: var(--card-bg);
+    transition: all 0.15s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.filter-chip:hover {
+    border-color: var(--navy);
+    color: var(--navy);
+}
+
+.filter-chip.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: #fff;
+}
+
+.search-wrap {
+    position: relative;
+    margin-left: auto;
+}
+
+.search-wrap i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    font-size: 0.8rem;
+}
+
+.search-input {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px 6px 30px;
+    font-size: 0.78rem;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-main);
+    background: var(--card-bg);
+    outline: none;
+    width: 180px;
+    transition: border-color 0.15s, width 0.2s;
+}
+
+.search-input:focus {
+    border-color: var(--emerald);
+    width: 220px;
+}
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal-box {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 2rem;
+    width: 100%;
+    max-width: 480px;
+    animation: popIn 0.25s ease;
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 0.25rem;
+}
+
+.modal-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+/* Partial payment input inside modal */
+.partial-input {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    outline: none;
+    color: var(--navy);
+    transition: border-color 0.2s;
+}
+
+.partial-input:focus {
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* ── ANIMATION ── */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-up {
+    animation: fadeUp 0.3s ease both;
+}
+
+/* ── TABS (Add / List) ── */
+.page-tab-row {
+    display: flex;
+    gap: 4px;
+    background: #F1F5F9;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 2rem;
+    width: fit-content;
+}
+
+.page-tab {
+    padding: 8px 20px;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.page-tab.active {
+    background: var(--card-bg);
+    color: var(--navy);
+    box-shadow: var(--shadow-sm);
+}

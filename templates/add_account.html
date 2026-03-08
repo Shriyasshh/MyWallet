@@ -42,13 +42,11 @@ Account {% endblock %} {% block content-head %}
                     <div class="type-grid">
                         <div
                             class="type-card selected"
-                            onclick="selectType(this, 'Cash')"
-                        >
+                            onclick="selectType(this, 'Cash')">
                             <div class="check"><i class="bi bi-check"></i></div>
                             <div
                                 class="type-icon"
-                                style="background: #d1fae5; color: #10b981"
-                            >
+                                style="background: #d1fae5; color: #10b981">
                                 <i class="bi bi-cash-stack"></i>
                             </div>
                             <div class="type-name">Cash</div>
@@ -56,13 +54,11 @@ Account {% endblock %} {% block content-head %}
                         </div>
                         <div
                             class="type-card"
-                            onclick="selectType(this, 'Bank')"
-                        >
+                            onclick="selectType(this, 'Bank')">
                             <div class="check"><i class="bi bi-check"></i></div>
                             <div
                                 class="type-icon"
-                                style="background: #e0f2fe; color: #0284c7"
-                            >
+                                style="background: #e0f2fe; color: #0284c7">
                                 <i class="bi bi-building-fill"></i>
                             </div>
                             <div class="type-name">Bank Account</div>
@@ -70,13 +66,11 @@ Account {% endblock %} {% block content-head %}
                         </div>
                         <div
                             class="type-card"
-                            onclick="selectType(this, 'Credit Card')"
-                        >
+                            onclick="selectType(this, 'Credit Card')">
                             <div class="check"><i class="bi bi-check"></i></div>
                             <div
                                 class="type-icon"
-                                style="background: #fee2e2; color: #ef4444"
-                            >
+                                style="background: #fee2e2; color: #ef4444">
                                 <i class="bi bi-credit-card-2-front-fill"></i>
                             </div>
                             <div class="type-name">Credit Card</div>
@@ -84,13 +78,11 @@ Account {% endblock %} {% block content-head %}
                         </div>
                         <div
                             class="type-card"
-                            onclick="selectType(this, 'Savings')"
-                        >
+                            onclick="selectType(this, 'Savings')">
                             <div class="check"><i class="bi bi-check"></i></div>
                             <div
                                 class="type-icon"
-                                style="background: #ede9fe; color: #8b5cf6"
-                            >
+                                style="background: #ede9fe; color: #8b5cf6">
                                 <i class="bi bi-safe2-fill"></i>
                             </div>
                             <div class="type-name">Savings Goal</div>
@@ -617,9 +609,7 @@ Account {% endblock %} {% block content-head %}
 <script>
     // Function to handle card selection for account type
     function selectType(element, type) {
-        document
-            .querySelectorAll(".type-card")
-            .forEach((card) => card.classList.remove("selected"));
+        document.querySelectorAll(".type-card").forEach((card) => card.classList.remove("selected"));
         element.classList.add("selected");
 
         // Update both global and hidden input

@@ -1,0 +1,546 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} {% endblock %}
+
+{% block content-head %}
+<link rel="stylesheet" href="{% static 'css/debt.css' %}" />
+{% endblock %}
+
+{% block content %}
+
+<div class="container-xl" style="padding-bottom: 4rem;">
+
+    <!-- Breadcrumb -->
+    <!-- <div class="breadcrumb-bar fade-up">
+        <a href="index.html">Dashboard</a>
+        <span class="sep">›</span>
+        <span class="current">Debt Manager</span>
+    </div> -->
+
+    <!-- Header -->
+    <div class="d-flex align-items-start justify-content-between flex-wrap gap-3" style="padding: 1.25rem 0 2rem;">
+        <div class="fade-up">
+            <div class="page-label">Finance</div>
+            <h1 class="page-title">Debt Manager</h1>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-grid fade-up">
+        <div class="sum-card">
+            <div class="sum-label">I Owe (Borrowed)</div>
+            <div class="sum-value" style="color:var(--red);">$3,240</div>
+            <div class="sum-sub">Across 3 debts</div>
+            <div class="sum-bar">
+                <div class="sum-bar-fill" style="width:65%;background:var(--red);"></div>
+            </div>
+        </div>
+        <div class="sum-card">
+            <div class="sum-label">Owed to Me (Lent)</div>
+            <div class="sum-value" style="color:var(--emerald);">$1,850</div>
+            <div class="sum-sub">Across 4 people</div>
+            <div class="sum-bar">
+                <div class="sum-bar-fill" style="width:45%;background:var(--emerald);"></div>
+            </div>
+        </div>
+        <div class="sum-card">
+            <div class="sum-label">Net Balance</div>
+            <div class="sum-value" style="color:var(--navy);">-$1,390</div>
+            <div class="sum-sub">You owe more than owed</div>
+            <div class="sum-bar">
+                <div class="sum-bar-fill" style="width:38%;background:var(--amber);"></div>
+            </div>
+        </div>
+        <div class="sum-card">
+            <div class="sum-label">Overdue</div>
+            <div class="sum-value" style="color:var(--red);">$800</div>
+            <div class="sum-sub">2 debts past due date</div>
+            <div class="sum-bar">
+                <div class="sum-bar-fill" style="width:25%;background:var(--red);"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Tabs -->
+    <div class="page-tab-row fade-up">
+        <button class="page-tab active" onclick="switchTab('list', this)"><i class="bi bi-list-ul"></i> All
+            Debts</button>
+        <button class="page-tab" onclick="switchTab('add', this)"><i class="bi bi-plus-circle-fill"></i> Add
+            Debt</button>
+    </div>
+
+    <!-- ══════════════ ADD DEBT TAB ══════════════ -->
+    <div id="tab-add" style="display:none;">
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div style="max-width: 760px;">
+
+                <!-- Borrowed / Lent selector -->
+                <div class="debt-type-row fade-up">
+                    <div class="debt-type-tab borrowed active" id="dtype-borrowed" onclick="selectDebtType('borrowed')">
+                        <span class="debt-type-icon">📥</span>
+                        <div class="debt-type-title">I Borrowed Money</div>
+                        <div class="debt-type-sub">I took money from someone</div>
+                    </div>
+                    <div class="debt-type-tab lent" id="dtype-lent" onclick="selectDebtType('lent')">
+                        <span class="debt-type-icon">📤</span>
+                        <div class="debt-type-title">I Lent Money</div>
+                        <div class="debt-type-sub">I gave money to someone</div>
+                    </div>
+                    <input type="hidden" name="debtType" id="debtTypeInput" value="borrowed">
+                </div>
+
+                <!-- Context banner -->
+                <div id="contextBanner" class="fade-up"
+                    style="padding:12px 16px;border-radius:10px;margin-bottom:1.25rem;font-size:0.8rem;font-weight:500;display:flex;align-items:center;gap:10px;background:var(--red-light);color:#991B1B;border:1px solid #FECACA;">
+                    <i class="bi bi-arrow-down-circle-fill" style="font-size:1.1rem;"></i>
+                    <span id="bannerText">You received money — this is money you <strong>owe</strong> back to
+                        someone.</span>
+                </div>
+
+                <!-- Amount -->
+                <div class="form-card fade-up">
+                    <div class="form-card-title"><i class="bi bi-cash-stack"></i> <span id="amountLabel">Amount
+                            Borrowed</span>
+                    </div>
+                    <div class="amount-wrapper">
+                        <span class="amount-prefix">$</span>
+                        <input class="amount-input borrowed" name="amount" id="amountInput" type="number"
+                            placeholder="0.00" step="0.01" min="0" />
+                    </div>
+                </div>
+
+                <!-- Person & Account -->
+                <div class="form-card fade-up">
+                    <div class="form-card-title"><i class="bi bi-person-fill"></i> <span id="personLabel">Borrowed
+                            From</span>
+                    </div>
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label"><span id="personFieldLabel">Person / Organisation</span> <span
+                                    style="color:var(--red);">*</span></label>
+                            <input class="f-input" type="text" name="borrow/lentFrom" id="personName"
+                                placeholder="e.g. John Smith, Acme Bank…" />
+                        </div>
+                        <div class="f-group">
+                            <label class="f-label">Relationship</label>
+                            <select class="f-select" name="relation">
+                                <option value="">Select…</option>
+                                <option value="Family">👨‍👩‍👧 Family</option>
+                                <option value="Friends">👫 Friend</option>
+                                <option value="Colleague">💼 Colleague</option>
+                                <option value="Bank">🏦 Bank / Institution</option>
+                                <option value="Other">📦 Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="f-group">
+                        <label class="f-label">Contact / Phone (optional)</label>
+                        <input class="f-input" type="text" name="contact" placeholder="+1 (555) 000-0000 or email" />
+                    </div>
+                    <div class="f-group">
+                        <label class="f-label">Linked Account</label>
+                        <select class="f-select">
+                            <option value="">Which account was used?</option>
+                            {% for account in acc %}
+                            <option value="{{ account.id }}">{{ account.accountName }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Dates & Due -->
+                <div class="form-card fade-up">
+                    <div class="form-card-title"><i class="bi bi-calendar3"></i> Dates</div>
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label">Date <span style="color:var(--red);">*</span></label>
+                            <input class="f-input" name="date" type="date" id="debtDate" />
+                        </div>
+                        <div class="f-group">
+                            <label class="f-label">Due Date</label>
+                            <input class="f-input" name="duedate" type="date" id="dueDate" />
+                        </div>
+                    </div>
+                    <!-- <div class="toggle-row">
+                    <div>
+                        <div class="toggle-label">Add Reminder</div>
+                        <div class="toggle-sub">Get notified 3 days before due date</div>
+                    </div>
+                    <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+                </div> -->
+                </div>
+
+                <!-- Interest -->
+                <!-- <div class="form-card fade-up">
+                <div class="form-card-title"><i class="bi bi-percent"></i> Interest (optional)</div>
+                <div class="toggle-row" style="margin-bottom:12px;">
+                    <div>
+                        <div class="toggle-label">This debt has interest</div>
+                        <div class="toggle-sub">Calculate interest automatically</div>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="interestToggle"
+                            onchange="document.getElementById('interestFields').style.display=this.checked?'block':'none'" /><span
+                            class="slider"></span></label>
+                </div>
+                <div id="interestFields" style="display:none;">
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label">Interest Rate (%)</label>
+                            <input class="f-input" type="number" placeholder="e.g. 5.5" step="0.1" />
+                        </div>
+                        <div class="f-group">
+                            <label class="f-label">Type</label>
+                            <select class="f-select">
+                                <option>Simple Interest</option>
+                                <option>Compound Interest</option>
+                            </select>
+                        </div>
+                        <div class="f-group">
+                            <label class="f-label">Period</label>
+                            <select class="f-select">
+                                <option>Per Year</option>
+                                <option>Per Month</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+                <!-- Priority & Notes -->
+                <div class="form-card fade-up">
+                    <div class="form-card-title"><i class="bi bi-flag-fill"></i> Priority & Notes</div>
+                    <!-- <div class="f-group">
+                    <label class="f-label">Priority</label>
+                    <div class="priority-grid">
+                        <button class="priority-opt" onclick="pickPriority(this,'low')">🟢 Low</button>
+                        <button class="priority-opt selected-medium" onclick="pickPriority(this,'medium')">🟡
+                            Medium</button>
+                        <button class="priority-opt" onclick="pickPriority(this,'high')">🔴 High</button>
+                    </div>
+                </div> -->
+                    <div class="f-group" style="margin-top:1rem;">
+                        <label class="f-label">Notes / Purpose</label>
+                        <textarea class="f-input" rows="3" style="resize:none;" name="note"
+                            placeholder="What was the money used for? Any agreed terms?"></textarea>
+                    </div>
+                    <div class="f-group">
+                        <label class="f-label">Repayment Plan</label>
+                        <select class="f-select" name="repaymentPlan">
+                            <option value="">Select repayment plan…</option>
+                            <option>Lump sum on due date</option>
+                            <option>Weekly instalments</option>
+                            <option>Monthly instalments</option>
+                            <option>No fixed plan</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="d-flex gap-3 flex-wrap fade-up">
+                    <button class="btn-submit"  type="submit">
+                        <i class="bi bi-check-circle-fill"></i> Save Debt Record
+                    </button>
+                    <button class="btn-cancel" onclick="resetForm()">Reset</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <!-- ══════════════ LIST TAB ══════════════ -->
+    <div id="tab-list">
+
+        <!-- Filter bar -->
+        <div class="filter-bar fade-up">
+            <button class="filter-chip active" onclick="filterDebts('all',this)">All</button>
+            <button class="filter-chip" onclick="filterDebts('borrowed',this)">📥 I Owe</button>
+            <button class="filter-chip" onclick="filterDebts('lent',this)">📤 Owed to Me</button>
+            <button class="filter-chip" onclick="filterDebts('overdue',this)">🔴 Overdue</button>
+            <button class="filter-chip" onclick="filterDebts('settled',this)">✅ Settled</button>
+            <div class="search-wrap">
+                <i class="bi bi-search"></i>
+                <input class="search-input" type="text" placeholder="Search person…"
+                    oninput="searchDebts(this.value)" />
+            </div>
+        </div>
+
+        <!-- Debt List -->
+        <div class="list-card fade-up" id="debtList">
+            <div class="list-header">
+                <span class="list-header-title">Active Debts</span>
+                <span style="font-size:0.72rem;color:var(--text-muted);" id="debtCount">7 records</span>
+            </div>
+
+            <!-- Items injected by JS -->
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ══════════ SETTLE / PARTIAL PAYMENT MODAL ══════════ -->
+<div class="modal-overlay" id="settleModal">
+    <div class="modal-box">
+        <div class="modal-title" id="modalTitle">Record Payment</div>
+        <div class="modal-sub" id="modalSub">Enter the amount being paid now</div>
+
+        <div style="margin-bottom:1rem;">
+            <label class="f-label">Payment Amount</label>
+            <div style="position:relative;">
+                <span
+                    style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:1rem;font-weight:700;color:var(--text-muted);">$</span>
+                <input class="partial-input" type="number" id="partialAmount" placeholder="0.00"
+                    style="padding-left:26px;" />
+            </div>
+        </div>
+
+        <div style="margin-bottom:1rem;">
+            <label class="f-label">Payment Date</label>
+            <input class="f-input" type="date" id="paymentDate" />
+        </div>
+
+        <div style="margin-bottom:1.5rem;">
+            <label class="f-label">Note (optional)</label>
+            <input class="f-input" type="text" placeholder="e.g. Bank transfer, Cash…" />
+        </div>
+
+        <div style="background:#F8FAFC;border-radius:9px;padding:12px 14px;margin-bottom:1.5rem;font-size:0.78rem;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                <span style="color:var(--text-muted);">Total Debt</span>
+                <span style="font-weight:700;color:var(--navy);" id="modalTotal">$0</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                <span style="color:var(--text-muted);">Already Paid</span>
+                <span style="font-weight:700;color:var(--emerald);" id="modalPaid">$0</span>
+            </div>
+            <div
+                style="display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:6px;margin-top:6px;">
+                <span style="color:var(--text-muted);">Remaining After</span>
+                <span style="font-weight:800;color:var(--red);" id="modalRemaining">$0</span>
+            </div>
+        </div>
+
+        <div class="d-flex gap-3">
+            <button class="btn-submit" style="flex:1;" onclick="confirmPayment()"><i
+                    class="bi bi-check-circle-fill"></i>
+                Confirm Payment</button>
+            <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ── Sample debt data ──
+    const debts = [
+        { id: 1, type: 'borrowed', person: 'Rahul Sharma', initials: 'RS', amount: 1500, paid: 500, due: '2026-03-15', status: 'overdue', priority: 'high', note: 'Emergency loan', relation: 'Friend' },
+        { id: 2, type: 'borrowed', person: 'HDFC Bank', initials: 'HB', amount: 1200, paid: 0, due: '2026-04-01', status: 'upcoming', priority: 'high', note: 'Personal loan EMI', relation: 'Bank' },
+        { id: 3, type: 'borrowed', person: 'Priya Mehta', initials: 'PM', amount: 540, paid: 540, due: '2026-02-10', status: 'settled', priority: 'low', note: 'Lunch splits', relation: 'Colleague' },
+        { id: 4, type: 'lent', person: 'Arjun Kapoor', initials: 'AK', amount: 800, paid: 300, due: '2026-03-20', status: 'overdue', priority: 'medium', note: 'Bike repair', relation: 'Friend' },
+        { id: 5, type: 'lent', person: 'Sneha Patil', initials: 'SP', amount: 450, paid: 0, due: '2026-04-10', status: 'upcoming', priority: 'low', note: 'Travel expenses', relation: 'Family' },
+        { id: 6, type: 'lent', person: 'Dev Joshi', initials: 'DJ', amount: 300, paid: 300, due: '2026-01-30', status: 'settled', priority: 'low', note: 'Groceries split', relation: 'Friend' },
+        { id: 7, type: 'lent', person: 'Meera Nair', initials: 'MN', amount: 300, paid: 0, due: '2026-05-01', status: 'ok', priority: 'medium', note: 'Course fee advance', relation: 'Colleague' },
+    ];
+
+    let currentFilter = 'all';
+    let activeDebt = null;
+    let currentDebtType = 'borrowed';
+
+    // ── PAGE TAB SWITCH ──
+    function switchTab(tab, btn) {
+        document.querySelectorAll('.page-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-add').style.display = tab === 'add' ? 'block' : 'none';
+        document.getElementById('tab-list').style.display = tab === 'list' ? 'block' : 'none';
+        if (tab === 'list') renderDebts(currentFilter);
+    }
+
+    // ── DEBT TYPE SELECTOR ──
+    function selectDebtType(type) {
+        currentDebtType = type;
+        document.getElementById('dtype-borrowed').classList.remove('active');
+        document.getElementById('dtype-lent').classList.remove('active');
+        document.getElementById('dtype-' + type).classList.add('active');
+        document.getElementById('debtTypeInput').value = type;
+        document.getElementById('amountInput').className = 'amount-input ' + type;
+
+        const isBorrowed = type === 'borrowed';
+        document.getElementById('amountLabel').textContent = isBorrowed ? 'Amount Borrowed' : 'Amount Lent';
+        document.getElementById('personLabel').textContent = isBorrowed ? 'Borrowed From' : 'Lent To';
+        document.getElementById('personFieldLabel').textContent = isBorrowed ? 'Borrowed from (Person / Org)' : 'Lent to (Person / Org)';
+
+        const banner = document.getElementById('contextBanner');
+        const bannerText = document.getElementById('bannerText');
+        if (isBorrowed) {
+            banner.style.background = 'var(--red-light)';
+            banner.style.borderColor = '#FECACA';
+            banner.style.color = '#991B1B';
+            banner.querySelector('i').className = 'bi bi-arrow-down-circle-fill';
+            bannerText.innerHTML = 'You <strong>received</strong> money — this is money you <strong>owe</strong> back to someone.';
+        } else {
+            banner.style.background = 'var(--emerald-light)';
+            banner.style.borderColor = '#A7F3D0';
+            banner.style.color = '#065F46';
+            banner.querySelector('i').className = 'bi bi-arrow-up-circle-fill';
+            bannerText.innerHTML = 'You <strong>gave</strong> money — someone <strong>owes</strong> you this amount back.';
+        }
+    }
+
+    // ── PRIORITY PICKER ──
+    // function pickPriority(btn, level) {
+    //     document.querySelectorAll('.priority-opt').forEach(b => {
+    //         b.className = 'priority-opt';
+    //     });
+    //     btn.classList.add('selected-' + level);
+    // }
+
+    // ── RENDER DEBT LIST ──
+    function renderDebts(filter) {
+        currentFilter = filter;
+        const container = document.getElementById('debtList');
+        let items = debts;
+        if (filter !== 'all') items = debts.filter(d => {
+            if (filter === 'borrowed') return d.type === 'borrowed';
+            if (filter === 'lent') return d.type === 'lent';
+            if (filter === 'overdue') return d.status === 'overdue';
+            if (filter === 'settled') return d.status === 'settled';
+            return true;
+        });
+
+        document.getElementById('debtCount').textContent = items.length + ' record' + (items.length !== 1 ? 's' : '');
+
+        const statusMap = {
+            overdue: { label: 'Overdue', cls: 'status-overdue' },
+            upcoming: { label: 'Upcoming', cls: 'status-upcoming' },
+            ok: { label: 'On Track', cls: 'status-ok' },
+            settled: { label: 'Settled', cls: 'status-settled' },
+        };
+
+        const rows = items.map(d => {
+            const pct = Math.round((d.paid / d.amount) * 100);
+            const rem = d.amount - d.paid;
+            const st = statusMap[d.status];
+            const due = new Date(d.due + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const fill = d.type === 'lent' ? 'var(--emerald)' : 'var(--red)';
+            const actionBtn = d.status !== 'settled'
+                ? `<button onclick="openModal(${d.id},event)" style="font-size:0.7rem;padding:5px 12px;border-radius:7px;border:1.5px solid var(--border);background:var(--card-bg);cursor:pointer;font-family:'Poppins',sans-serif;font-weight:700;white-space:nowrap;color:var(--navy);transition:all 0.15s;" onmouseover="this.style.background='var(--emerald)';this.style.color='#fff';this.style.borderColor='var(--emerald)'" onmouseout="this.style.background='var(--card-bg)';this.style.color='var(--navy)';this.style.borderColor='var(--border)'">💳 Pay</button>`
+                : `<span style="font-size:0.7rem;color:var(--text-light);">—</span>`;
+
+            return `
+    <div class="debt-item" data-type="${d.type}" data-status="${d.status}" data-person="${d.person.toLowerCase()}">
+        <div class="debt-avatar ${d.type}">${d.initials}</div>
+        <div style="flex:1;min-width:0;">
+        <div class="debt-name">${d.person}</div>
+        <div class="debt-meta">${d.type === 'borrowed' ? '📥 Borrowed from' : '📤 Lent to'} · ${d.relation} · Due ${due}</div>
+        <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">${d.note}</div>
+        </div>
+        <div class="debt-progress-wrap">
+        <div class="debt-pct">${pct}% paid</div>
+        <div class="debt-progress-bar"><div class="debt-progress-fill" style="width:${pct}%;background:${fill};"></div></div>
+        <div style="font-size:0.6rem;color:var(--text-muted);margin-top:2px;">$${d.paid} of $${d.amount}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+        <div class="debt-amount ${d.type}">${d.type === 'lent' ? '+' : '-'}$${rem > 0 ? rem.toLocaleString() : d.amount.toLocaleString()}</div>
+        <div style="margin-top:4px;"><span class="debt-status ${st.cls}">${st.label}</span></div>
+        </div>
+        <div style="flex-shrink:0;">${actionBtn}</div>
+    </div>`;
+        }).join('');
+
+        // Keep header, replace content
+        container.innerHTML = `
+    <div class="list-header">
+    <span class="list-header-title">Active Debts</span>
+    <span style="font-size:0.72rem;color:var(--text-muted);" id="debtCount">${items.length} record${items.length !== 1 ? 's' : ''}</span>
+    </div>
+    ${rows || '<div style="padding:2rem;text-align:center;color:var(--text-muted);font-size:0.82rem;">No records found.</div>'}`;
+    }
+
+    // ── FILTER CHIPS ──
+    function filterDebts(filter, btn) {
+        document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderDebts(filter);
+    }
+
+    // ── SEARCH ──
+    function searchDebts(val) {
+        document.querySelectorAll('.debt-item').forEach(item => {
+            item.style.display = item.dataset.person.includes(val.toLowerCase()) ? '' : 'none';
+        });
+    }
+
+    // ── SETTLE MODAL ──
+    function openModal(id, e) {
+        e.stopPropagation();
+        activeDebt = debts.find(d => d.id === id);
+        if (!activeDebt) return;
+        const rem = activeDebt.amount - activeDebt.paid;
+        document.getElementById('modalTitle').textContent = `Pay ${activeDebt.type === 'borrowed' ? 'Back to' : 'Received from'} ${activeDebt.person}`;
+        document.getElementById('modalSub').textContent = `Remaining: $${rem.toLocaleString()} of $${activeDebt.amount.toLocaleString()}`;
+        document.getElementById('modalTotal').textContent = '$' + activeDebt.amount.toLocaleString();
+        document.getElementById('modalPaid').textContent = '$' + activeDebt.paid.toLocaleString();
+        document.getElementById('modalRemaining').textContent = '$' + rem.toLocaleString();
+        document.getElementById('partialAmount').value = '';
+        document.getElementById('paymentDate').value = new Date().toISOString().split('T')[0];
+
+        // Live remaining update
+        document.getElementById('partialAmount').oninput = function () {
+            const paying = parseFloat(this.value) || 0;
+            const newRem = Math.max(0, rem - paying);
+            document.getElementById('modalRemaining').textContent = '$' + newRem.toLocaleString('en-US', { minimumFractionDigits: 2 });
+        };
+
+        document.getElementById('settleModal').classList.add('open');
+    }
+
+    function closeModal() { document.getElementById('settleModal').classList.remove('open'); }
+
+    function confirmPayment() {
+        const paying = parseFloat(document.getElementById('partialAmount').value) || 0;
+        if (!paying || paying <= 0) { document.getElementById('partialAmount').style.borderColor = 'var(--red)'; return; }
+        if (activeDebt) {
+            activeDebt.paid = Math.min(activeDebt.amount, activeDebt.paid + paying);
+            if (activeDebt.paid >= activeDebt.amount) activeDebt.status = 'settled';
+        }
+        closeModal();
+        renderDebts(currentFilter);
+    }
+
+    // ── SAVE (placeholder) ──
+    // function saveDebt() {
+    //     const amt = parseFloat(document.getElementById('amountInput').value);
+    //     const name = document.getElementById('personName').value.trim();
+    //     if (!amt || amt <= 0) { document.getElementById('amountInput').style.borderColor = 'var(--red)'; document.getElementById('amountInput').focus(); setTimeout(() => document.getElementById('amountInput').style.borderColor = '', 2000); return; }
+    //     if (!name) { document.getElementById('personName').style.borderColor = 'var(--red)'; document.getElementById('personName').focus(); setTimeout(() => document.getElementById('personName').style.borderColor = '', 2000); return; }
+
+    //     // Add to list and switch to list tab
+    //     const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    //     debts.unshift({
+    //         id: Date.now(), type: currentDebtType, person: name, initials,
+    //         amount: amt, paid: 0,
+    //         due: document.getElementById('dueDate').value || '2026-12-31',
+    //         status: 'ok', priority: 'medium', note: 'Newly added', relation: 'Other'
+    //     });
+    //     resetForm();
+    //     switchTab('list', document.querySelectorAll('.page-tab')[1]);
+    // }
+
+    // ── RESET FORM ──
+    function resetForm() {
+        document.getElementById('amountInput').value = '';
+        document.getElementById('personName').value = '';
+        document.getElementById('debtDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('dueDate').value = '';
+        selectDebtType('borrowed');
+    }
+
+    // ── INIT ──
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('debtDate').value = today;
+    renderDebts('all'); // pre-render so it's ready when tab opens
+</script>
+
+{% endblock %}

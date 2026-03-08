@@ -75,8 +75,32 @@ class Transaction(models.Model):
             to_account.save()
         super().save(*args, **kwargs)
 
-            
-
-
     def __str__(self):
         return self.payment_type
+    
+class Debt(models.Model):
+    
+    DEBT_TYPE_CHOICES = [
+        ('borrowed', 'Borrowed'),
+        ('lent', 'Lent'),
+    ]
+    RELATION_CHOICES = [
+        ('Family', 'Family'),
+        ('Friend', 'Friend'),
+        ('Colleague', 'Colleague'),
+        ('Bank', 'Bank'),
+        ('Other', 'Other'),
+    ]
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    debtType = models.CharField(max_length=50,choices=DEBT_TYPE_CHOICES)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    borrow_lent_from = models.CharField(max_length=100)
+    relation = models.CharField(max_length=50,choices=RELATION_CHOICES)
+    contact = models.CharField(max_length=100, blank=True, null=True)
+    linkedAccount = models.ForeignKey(AddAccount, on_delete=models.CASCADE)
+    date = models.DateField()
+    duedate = models.DateField()
+    note = models.TextField(blank=True, null=True)
+    repayment = models.CharField(max_length=50,blank=True,null=True)   
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
