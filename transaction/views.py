@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 import decimal
 from django.db.models import Q
 from django.core.paginator import Paginator
+from transaction.forms import DebtForm
 # Create your views here.
 
 @login_required
@@ -170,4 +171,21 @@ def transaction(request,pk):
 
 @login_required
 def debt_manager(request):
-    return render(request, 'debt-manager.html')
+    acc = AddAccount.objects.filter(user=request.user)
+    currency = acc.first().get_currency_display() if acc.exists() else ''
+    # total_borrowed = transaction.aggregate(total = Sum('accountBalance'))['total'] or 0
+
+    if request.method =='POST':
+        form = DebtForm(request.POST)
+        if form.is_valid():
+            account = form.save(commit=False)
+            account.user = request.user
+            account.save()
+            return redirect('debt-manager')
+    else:
+        form = DebtForm()
+    
+    context = {'form': form,
+               'acc': acc,
+               'currency': currency}
+    return render(request, 'debt-manager.html',context)

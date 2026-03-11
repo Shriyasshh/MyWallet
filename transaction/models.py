@@ -104,3 +104,13 @@ class Debt(models.Model):
     repayment = models.CharField(max_length=50,blank=True,null=True)   
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self,*args,**kwargs): 
+        account = self.linkedAccount 
+        if self.debtType == 'borrowed': 
+            account.accountBalance +=self.amount 
+            account.save() 
+        elif self.debtType == 'lent': 
+            account.accountBalance -=self.amount 
+            account.save() 
+        super().save(*args, **kwargs)

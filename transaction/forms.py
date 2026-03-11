@@ -1,4 +1,5 @@
-# from django import forms
+from django import forms
+from .models import Debt
 # from .models import Transaction
 
 # class TransactionForm(forms.ModelForm):
@@ -22,3 +23,20 @@
 #             'time': forms.TimeInput(attrs={'type': 'time'}),
 #             'note': forms.Textarea(attrs={'rows': 2}),
 #         }
+
+class DebtForm(forms.ModelForm):
+
+    class Meta:
+        model = Debt
+        fields = [
+            'debtType',
+            'amount',
+            'borrow_lent_from',
+            'relation',
+            'contact',
+            'linkedAccount',
+            'date',
+            'duedate',
+            'note',
+            'repayment'
+        ]
