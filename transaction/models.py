@@ -9,6 +9,8 @@ class Transaction(models.Model):
         ('expense', 'Expense'),
         ('income', 'Income'),
         ('transfer', 'Transfer'),
+        ('borrowed', 'Borrowed'),
+        ('lent', 'Lent'),
     ]
     CATEGORY_CHOICES = [
         ('Food', 'Food'),
@@ -27,6 +29,8 @@ class Transaction(models.Model):
         ('Salary', 'Salary'),
         ('Investment', 'Investment'),
         ('Other', 'Other'),
+        ('borrowed', 'Borrowed'),
+        ('lent', 'Lent'),
     ]
 
 
@@ -107,10 +111,36 @@ class Debt(models.Model):
 
     def save(self,*args,**kwargs): 
         account = self.linkedAccount 
+        # determine if this is a new record before saving
+        is_new = self.pk is None
+
+        # update linked account balance according to debt type
         if self.debtType == 'borrowed': 
-            account.accountBalance +=self.amount 
+            account.accountBalance += self.amount 
             account.save() 
         elif self.debtType == 'lent': 
-            account.accountBalance -=self.amount 
+            account.accountBalance -= self.amount 
             account.save() 
+
+        # persist the Debt itself
         super().save(*args, **kwargs)
+
+        # when a new debt is created, also record a matching transaction
+        if is_new:
+            # note text should mirror the logic used in the view
+            if self.debtType == 'borrowed':
+                t_note = f"Money {self.debtType} from {self.borrow_lent_from} till {self.duedate}"
+            else:
+                t_note = f"Money {self.debtType} to {self.borrow_lent_from} till {self.duedate}"
+
+            Transaction.objects.create(
+                user=self.user,
+                payment_type=self.debtType,
+                amount=self.amount,
+                category=self.debtType,
+                account=self.linkedAccount,
+                date=self.date,
+                time="12:00",
+                payee=self.borrow_lent_from,
+                note=t_note,
+            )

@@ -174,13 +174,32 @@ def debt_manager(request):
     acc = AddAccount.objects.filter(user=request.user)
     currency = acc.first().get_currency_display() if acc.exists() else ''
     # total_borrowed = transaction.aggregate(total = Sum('accountBalance'))['total'] or 0
-
     if request.method =='POST':
         form = DebtForm(request.POST)
         if form.is_valid():
-            account = form.save(commit=False)
-            account.user = request.user
-            account.save()
+            debt = form.save(commit=False)
+            debt.user = request.user
+            # first persist the debt so its balance update applies
+            debt.save()
+
+            # now create a matching transaction record
+            if debt.debtType == 'borrowed':
+                t_note= f"Money {debt.debtType} from {debt.borrow_lent_from} till {debt.duedate}"
+            else:
+                t_note = f"Money {debt.debtType} to {debt.borrow_lent_from} till {debt.duedate}"
+            trans = Transaction(
+                user=request.user,
+                payment_type=debt.debtType,
+                amount=debt.amount,
+                category=debt.debtType,
+                account=debt.linkedAccount,
+                date=debt.date,
+                time="12:00",
+                payee=debt.borrow_lent_from,
+                note = t_note,
+            )
+            trans.save()
+            
             return redirect('debt-manager')
     else:
         form = DebtForm()
