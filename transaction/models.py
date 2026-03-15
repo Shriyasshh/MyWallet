@@ -105,7 +105,8 @@ class Debt(models.Model):
     date = models.DateField()
     duedate = models.DateField()
     note = models.TextField(blank=True, null=True)
-    repayment = models.CharField(max_length=50,blank=True,null=True)   
+    repayment = models.CharField(max_length=50,blank=True,null=True)
+    returned = models.DecimalField(max_digits=10,decimal_places=2 , default= 0.00)   
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

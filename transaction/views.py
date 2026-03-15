@@ -1,13 +1,16 @@
+# from django.utils import timezone
 from datetime import date,timedelta
 from django.shortcuts import render,redirect
 from django.urls import reverse
 from accounts.models import AddAccount
-from transaction.models import Transaction
+from transaction.models import Transaction , Debt
 from django.contrib.auth.decorators import login_required
 import decimal
 from django.db.models import Q
 from django.core.paginator import Paginator
 from transaction.forms import DebtForm
+from django.db.models import Sum
+
 # Create your views here.
 
 @login_required
@@ -173,7 +176,31 @@ def transaction(request,pk):
 def debt_manager(request):
     acc = AddAccount.objects.filter(user=request.user)
     currency = acc.first().get_currency_display() if acc.exists() else ''
-    # total_borrowed = transaction.aggregate(total = Sum('accountBalance'))['total'] or 0
+    trans_borr = Transaction.objects.filter(user = request.user , payment_type = 'borrowed')
+    borrowed = trans_borr.aggregate(total = Sum('amount'))['total'] or 0
+    borrowed_count = trans_borr.count()
+    trans_lent = Transaction.objects.filter(user = request.user , payment_type = 'lent')
+    lent = trans_lent.aggregate(total = Sum('amount'))['total'] or 0
+    lent_count = trans_lent.count()
+    net_worth = lent - borrowed
+    debt = Debt.objects.filter(user=request.user)
+    today = date.today()
+    for d in debt:
+        d.paid_percentage = (d.returned * 100) / d.amount
+        d.remain = d.amount - d.returned
+        if d.paid_percentage == 100:
+            d.status = "Settled"
+            d.status_class = "settled"
+        elif today > d.duedate:
+            d.status = "Overdue"
+            d.status_class = "overdue"
+        elif 0 <= (d.duedate - today).days <= 7:
+            d.status = "Upcoming"
+            d.status_class = "upcoming"
+        else:
+            d.status = "On Track"
+            d.status_class = "ok"
+        print(d.remain)
     if request.method =='POST':
         form = DebtForm(request.POST)
         if form.is_valid():
@@ -197,6 +224,7 @@ def debt_manager(request):
                 time="12:00",
                 payee=debt.borrow_lent_from,
                 note = t_note,
+                
             )
             trans.save()
             
@@ -206,5 +234,13 @@ def debt_manager(request):
     
     context = {'form': form,
                'acc': acc,
-               'currency': currency}
+               'currency': currency,
+               'borrowed': borrowed,
+               'lent': lent,
+               'borrowed_count': borrowed_count,
+               'lent_count': lent_count,
+               'net_worth': net_worth,
+               'debt': debt,
+            #    'd_paid_per': d_paid_per
+               }
     return render(request, 'debt-manager.html',context)
