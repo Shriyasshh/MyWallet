@@ -6,4 +6,5 @@ urlpatterns = [
     path('add-record/', views.add_record, name='add_record'),
     path('<slug:pk>',views.transaction,name = 'transaction'),
     path('debt-manager/', views.debt_manager, name='debt-manager'),
+    path('debt-manager/settle/', views.settle_debt, name='settle-debt'),
 ]

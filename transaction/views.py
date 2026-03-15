@@ -244,3 +244,60 @@ def debt_manager(request):
             #    'd_paid_per': d_paid_per
                }
     return render(request, 'debt-manager.html',context)
+
+
+@login_required
+def settle_debt(request):
+    if request.method != 'POST':
+        return redirect('debt-manager')
+
+    debt_id = request.POST.get('debt_id')
+    amount_str = request.POST.get('partial_amount')
+    payment_date = request.POST.get('payment_date')
+    note = request.POST.get('note', '').strip()
+
+    try:
+        debt = Debt.objects.get(id=debt_id, user=request.user)
+    except Debt.DoesNotExist:
+        return redirect('debt-manager')
+
+    try:
+        payment_amount = decimal.Decimal(amount_str or '0')
+    except (decimal.InvalidOperation, TypeError):
+        payment_amount = decimal.Decimal('0')
+
+    if payment_amount <= 0:
+        return redirect('debt-manager')
+
+    remaining = debt.amount - debt.returned
+    if payment_amount > remaining:
+        payment_amount = remaining
+
+    # Adjust linked account balance depending on debt type
+    account = debt.linkedAccount
+    if debt.debtType == 'borrowed':
+        # User is paying back money => money leaves the account
+        account.accountBalance -= payment_amount
+    else:
+        # User is receiving money => money enters the account
+        account.accountBalance += payment_amount
+    account.save()
+
+    debt.returned += payment_amount
+    debt.save()
+
+    # Create a matching Transaction record for the repayment
+    transaction_type = 'expense' if debt.debtType == 'borrowed' else 'income'
+    Transaction.objects.create(
+        user=request.user,
+        payment_type=transaction_type,
+        amount=payment_amount,
+        category=debt.debtType,
+        account=account,
+        date=payment_date or debt.date,
+        time='12:00',
+        payee=debt.borrow_lent_from,
+        note=note or f"Payment towards {debt.debtType} debt",
+    )
+
+    return redirect('debt-manager')

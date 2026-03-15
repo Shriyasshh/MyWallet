@@ -279,8 +279,7 @@
                 <span style="font-size:0.72rem;color:var(--text-muted);" id="debtCount">7 records</span>
             </div>
             {% for d in debt %}
-            <div class="debt-item" data-id="1" data-type="borrowed" data-status="overdue" data-person="rahul sharma"
-                data-name="Rahul Sharma" data-amount="1500" data-paid="500">
+            <div class="debt-item" data-id="{{ d.id }}" data-type="{{ d.debtType }}" data-status="{{ d.status_class }}" data-person="{{ d.borrow_lent_from|lower }}" data-name="{{ d.borrow_lent_from }}" data-amount="{{ d.amount }}" data-paid="{{ d.returned }}" data-remain="{{ d.remain }}">
                 <!-- Person Name in Short -->
                 <div class="debt-avatar {{d.debtType}}">RS</div>
                 <div style="flex:1;min-width:0;">
@@ -311,7 +310,7 @@
                 </div>
                 {% if d.status_class != "settled" %}
                 <div style="flex-shrink:0;" class="debt-action">
-                    <button onclick="openModal(event)"
+                    <button onclick="openModal(this)"
                     style="font-size:0.7rem;padding:5px 12px;border-radius:7px;border:1.5px solid var(--border);background:var(--card-bg);cursor:pointer;font-family:'Poppins',sans-serif;font-weight:700;white-space:nowrap;color:var(--navy);transition:all 0.15s;"
                     onmouseover="this.style.background='var(--emerald)';this.style.color='#fff';this.style.borderColor='var(--emerald)'"
                     onmouseout="this.style.background='var(--card-bg)';this.style.color='var(--navy)';this.style.borderColor='var(--border)'">💳
@@ -336,27 +335,29 @@
 
 <!-- ══════════ SETTLE / PARTIAL PAYMENT MODAL ══════════ -->
   <div class="modal-overlay" id="settleModal">
-    <div class="modal-box">
+    <form method="post" action="{% url 'settle-debt' %}" class="modal-box" id="settleForm">
+      {% csrf_token %}
+      <input type="hidden" name="debt_id" id="debtIdInput" />
+
       <div class="modal-title" id="modalTitle">Record Payment</div>
       <div class="modal-sub" id="modalSub">Enter the amount being paid now</div>
 
       <div style="margin-bottom:1rem;">
         <label class="f-label">Payment Amount</label>
         <div style="position:relative;">
-          <span
-            style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:1rem;font-weight:700;color:var(--text-muted);">$</span>
-          <input class="partial-input" type="number" id="partialAmount" placeholder="0.00" style="padding-left:26px;" />
+          <!-- <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:1rem;font-weight:700;color:var(--text-muted);"></span> -->
+          <input class="partial-input" type="number" name="partial_amount" id="partialAmount" placeholder="0.00" style="padding-left:26px;" step="0.01" min="0" />
         </div>
       </div>
 
       <div style="margin-bottom:1rem;">
         <label class="f-label">Payment Date</label>
-        <input class="f-input" type="date" id="paymentDate" />
+        <input class="f-input" type="date" name="payment_date" id="paymentDate" />
       </div>
 
       <div style="margin-bottom:1.5rem;">
         <label class="f-label">Note (optional)</label>
-        <input class="f-input" type="text" placeholder="e.g. Bank transfer, Cash…" />
+        <input class="f-input" type="text" name="note" placeholder="e.g. Bank transfer, Cash…" />
       </div>
 
       <div style="background:#F8FAFC;border-radius:9px;padding:12px 14px;margin-bottom:1.5rem;font-size:0.78rem;">
@@ -376,15 +377,16 @@
       </div>
 
       <div class="d-flex gap-3">
-        <button class="btn-submit" style="flex:1;" onclick="confirmPayment()"><i class="bi bi-check-circle-fill"></i>
+        <button type="submit" class="btn-submit" style="flex:1;"><i class="bi bi-check-circle-fill"></i>
           Confirm Payment</button>
-        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
       </div>
-    </div>
+    </form>
   </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    const currencySymbol = "{{ currency }}";
     let currentFilter = 'all';
     let activeDebt = null;
     let currentDebtType = 'borrowed';
@@ -395,7 +397,7 @@
         btn.classList.add('active');
         document.getElementById('tab-add').style.display = tab === 'add' ? 'block' : 'none';
         document.getElementById('tab-list').style.display = tab === 'list' ? 'block' : 'none';
-        if (tab === 'list') renderDebts(currentFilter);
+        if (tab === 'list') filterDebts(currentFilter);
     }
 
     // ── DEBT TYPE SELECTOR ──
@@ -488,19 +490,35 @@
     }
 
     // ── MODAL ──
-    function openModal(e) {
-      e.stopPropagation();
+    function openModal(btn) {
+      const item = btn.closest('.debt-item');
+      if (!item) return;
+
+      activeDebt = item.dataset.id;
+      const total = parseFloat(item.dataset.amount) || 0;
+      const paid = parseFloat(item.dataset.paid) || 0;
+      const remain = parseFloat(item.dataset.remain) || Math.max(total - paid, 0);
+
+      document.getElementById('debtIdInput').value = activeDebt;
+      document.getElementById('modalTitle').textContent = `Pay ${item.dataset.name}`;
+      document.getElementById('modalTotal').textContent = `${currencySymbol}${total.toFixed(2)}`;
+      document.getElementById('modalPaid').textContent = `${currencySymbol}${paid.toFixed(2)}`;
+      document.getElementById('modalRemaining').textContent = `${currencySymbol}${remain.toFixed(2)}`;
+
+      const partialInput = document.getElementById('partialAmount');
+      partialInput.value = '';
+      partialInput.setAttribute('max', remain.toFixed(2));
+      partialInput.setAttribute('placeholder', `Max ${currencySymbol}${remain.toFixed(2)}`);
+
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('paymentDate').value = today;
+
       document.getElementById('settleModal').classList.add('open');
     }
 
     function closeModal() {
       document.getElementById('settleModal').classList.remove('open');
     }
-
-    function confirmPayment() {
-        closeModal();
-    }
-      
 
     // ── SAVE (placeholder) ──
     // function saveDebt() {
@@ -533,7 +551,7 @@
     // ── INIT ──
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('debtDate').value = today;
-    renderDebts('all'); // pre-render so it's ready when tab opens
+    filterDebts('all'); // pre-render so it's ready when tab opens
 </script>
 
 {% endblock %}

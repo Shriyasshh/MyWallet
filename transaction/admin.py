@@ -3,7 +3,7 @@ from .models import Transaction,Debt
 # Register your models here.
 
 class TransactionsAdmin(admin.ModelAdmin):
-    list_display = ('user','payment_type','amount',)
+    list_display = ('user','payment_type','category','account','amount')
 admin.site.register(Transaction,TransactionsAdmin)
 
 class DebtAdmin(admin.ModelAdmin):
