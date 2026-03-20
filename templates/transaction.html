@@ -44,6 +44,8 @@
                     <option value="income" {% if request.GET.type == 'income' %}selected{% endif %}>Income</option>
                     <option value="expense" {% if request.GET.type == 'expense' %}selected{% endif %}>Expense</option>
                     <option value="transfer" {% if request.GET.type == 'transfer' %}selected{% endif %}>Transfer</option>
+                    <option value="transfer" {% if request.GET.type == 'borrowed' %}selected{% endif %}>Borrowed</option>
+                    <option value="transfer" {% if request.GET.type == 'lent' %}selected{% endif %}>Lent</option>
                 </select>
 
                 <div class="search-wrap">
