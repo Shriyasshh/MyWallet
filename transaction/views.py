@@ -176,13 +176,22 @@ def transaction(request,pk):
 def debt_manager(request):
     acc = AddAccount.objects.filter(user=request.user)
     currency = acc.first().get_currency_display() if acc.exists() else ''
-    trans_borr = Transaction.objects.filter(user = request.user , payment_type = 'borrowed')
-    borrowed = trans_borr.aggregate(total = Sum('amount'))['total'] or 0
-    borrowed_count = trans_borr.count()
-    trans_lent = Transaction.objects.filter(user = request.user , payment_type = 'lent')
-    lent = trans_lent.aggregate(total = Sum('amount'))['total'] or 0
-    lent_count = trans_lent.count()
+    print(currency)
+    # Borrowed
+    debt_borrowed = Debt.objects.filter(user=request.user, debtType = 'borrowed')
+    borrowed_count = debt_borrowed.count()
+    borrowed_amt = debt_borrowed.aggregate(total = Sum('amount'))['total'] or 0
+    borrowed_ret = debt_borrowed.aggregate(total = Sum('returned'))['total'] or 0
+    borrowed = borrowed_amt - borrowed_ret
+    # Lent
+    debt_lent = Debt.objects.filter(user=request.user, debtType = 'lent')
+    lent_amt = debt_lent.aggregate(total = Sum('amount'))['total'] or 0
+    lent_ret = debt_lent.aggregate(total = Sum('returned'))['total'] or 0
+    lent = lent_amt - lent_ret
+    lent_count = debt_lent.count()
+    # Net Worth
     net_worth = lent - borrowed
+    
     debt = Debt.objects.filter(user=request.user)
     today = date.today()
     for d in debt:
@@ -208,25 +217,6 @@ def debt_manager(request):
             debt.user = request.user
             # first persist the debt so its balance update applies
             debt.save()
-
-            # now create a matching transaction record
-            if debt.debtType == 'borrowed':
-                t_note= f"Money {debt.debtType} from {debt.borrow_lent_from} till {debt.duedate}"
-            else:
-                t_note = f"Money {debt.debtType} to {debt.borrow_lent_from} till {debt.duedate}"
-            trans = Transaction(
-                user=request.user,
-                payment_type=debt.debtType,
-                amount=debt.amount,
-                category=debt.debtType,
-                account=debt.linkedAccount,
-                date=debt.date,
-                time="12:00",
-                payee=debt.borrow_lent_from,
-                note = t_note,
-                
-            )
-            trans.save()
             
             return redirect('debt-manager')
     else:
@@ -241,7 +231,6 @@ def debt_manager(request):
                'lent_count': lent_count,
                'net_worth': net_worth,
                'debt': debt,
-            #    'd_paid_per': d_paid_per
                }
     return render(request, 'debt-manager.html',context)
 
@@ -284,6 +273,7 @@ def settle_debt(request):
     account.save()
 
     debt.returned += payment_amount
+        
     debt.save()
 
     # Create a matching Transaction record for the repayment

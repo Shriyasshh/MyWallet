@@ -24,7 +24,7 @@
     </div>
 
     <!-- Centred, max-width form column -->
-    <div style="max-width: 860px;">
+    <div  style="max-width: 860px; ">
     <form method="post">
     {% csrf_token %}
 
@@ -48,11 +48,11 @@
 
         <!-- ② Amount -->
         <div class="form-card fade-up">
-            <div class="form-card-title"><i class="bi bi-cash-stack"></i> Amount</div>
+            <div class="form-card-title"><i class="bi bi-cash-stack"></i>Amount<span style="color:var(--red);">*</span></div>
             <div class="amount-wrapper">
                 <span class="amount-prefix">{{currency}}</span>
                 <input class="amount-input expense" id="amountInput" name="amount" type="number" placeholder="0.00" min="0"
-                    step="0.01" />
+                    step="0.01" required />
             </div>
 
         </div>
@@ -61,7 +61,7 @@
         <div class="form-card fade-up">
             <div class="form-card-title"><i class="bi bi-grid-3x3-gap-fill"></i> Category</div>
             <div class="cat-grid" id="catGrid"></div>
-            <input type="hidden" name="category" id="categoryInput">
+            <input type="hidden" name="category" id="categoryInput" required>
         </div>
 
         <!-- ④ Transaction Details -->
@@ -71,7 +71,7 @@
             <div class="f-row">
                 <div class="f-group">
                     <label class="f-label">Date <span style="color:var(--red);">*</span></label>
-                    <input class="f-input" type="date" id="dateInput" name="date" />
+                    <input class="f-input" type="date" id="dateInput" name="date" required />
                 </div>
                 <div class="f-group">
                     <label class="f-label">Time</label>
@@ -116,7 +116,7 @@
             <div class="f-group">
                 <label class="f-label">Note<span style="color:var(--red);">*</span></label>
                 <textarea class="f-input" style="resize:none;" name="note"
-                    placeholder="e.g. Whole Foods Market, Netflix, Salary…"></textarea>
+                    placeholder="e.g. Whole Foods Market, Netflix, Salary…" ></textarea>
             </div>
 
             <!-- <div class="f-row">

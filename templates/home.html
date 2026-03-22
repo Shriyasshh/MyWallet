@@ -15,7 +15,7 @@
                     <p class="greeting-sub">Your finances are looking healthy this month. Keep it up.</p>
                 </div>
                 <div class="col-md-5 net-worth-box mt-3 mt-md-0">
-                    <div class="net-worth-label">Total Net Worth</div>
+                    <div class="net-worth-label">Total Balance</div>
                     <div class="net-worth-value">{{currency}} {{total_balance}}</div>
                     <div class="net-worth-change"><i class="bi bi-arrow-up-right"></i> +$1,240 this month (+5.2%)</div>
                 </div>
@@ -24,7 +24,7 @@
 
         <!-- Quick Stats -->
         <div class="row g-3 mb-4 fade-in">
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-4">
                 <div class="stat-mini-card">
                     <div class="stat-mini-label">Monthly Income</div>
                     <div class="stat-mini-value" style="color:var(--emerald);">{{currency}} {{income}}</div>
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-4">
                 <div class="stat-mini-card">
                     <div class="stat-mini-label">Monthly Expenses</div>
                     <div class="stat-mini-value" style="color:var(--red);">{{currency}} {{expense}}</div>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-3">
+            <!-- <div class="col-6 col-md-3">
                 <div class="stat-mini-card">
                     <div class="stat-mini-label">Savings Rate</div>
                     <div class="stat-mini-value" style="color:var(--sky);">{{savings}}%</div>
@@ -50,11 +50,11 @@
                         <div style="width:40%;height:100%;background:var(--sky);border-radius:50px;"></div>
                     </div>
                 </div>
-            </div>
-            <div class="col-6 col-md-3">
+            </div> -->
+            <div class="col-6 col-md-4">
                 <div class="stat-mini-card">
-                    <div class="stat-mini-label">Transactions</div>
-                    <div class="stat-mini-value" style="color:var(--purple);">{{trans_count}}</div>
+                    <div class="stat-mini-label">Transactions Count <span class="pill-label">({{month}})</span></div>
+                     <div class="stat-mini-value" style="color:var(--purple);">{{trans_count}}</div>
                     <div class="stat-mini-bar" style="background:var(--purple-light);">
                         <div style="width:55%;height:100%;background:var(--purple);border-radius:50px;"></div>
                     </div>
@@ -88,6 +88,29 @@
                     </div>
                 </div>
                 {% endfor %}
+                {% else %}
+                <div class="col d-flex justify-content-center">
+				<div class="account-detail-card text-center p-4 w-100" >
+					<!-- Icon -->
+					<div class="mb-3">
+						<i class="bi bi-wallet2" style="font-size: 3rem; color: var(--emerald);"></i>
+					</div>
+					<!-- Title -->
+					<h5 style="font-weight: 700; color: var(--emerald);">
+						No Accounts
+					</h5>
+					<!-- Subtitle -->
+					<p style="font-size: 0.95rem;color: var(--text-muted);margin: 10px 0 20px 0;">
+						You don't have any accounts yet. Create one to start tracking your finances.
+					</p>
+					<!-- Button (UNCHANGED) -->
+					<a href="{% url 'add_account' %}" class="btn btn-primary add-account-btn text-light">
+						<i class="bi bi-plus-circle-fill"></i>
+						Add Account
+					</a>
+
+				</div>
+			</div>
                 {% endif %}
             </div>
         </div>
@@ -98,7 +121,7 @@
                 <div class="pill-icon debt"><i class="bi bi-exclamation-circle-fill"></i></div>
                 <div>
                     <div class="pill-label">Debt</div>
-                    <div class="pill-value debt">$2,400.00</div>
+                    <div class="pill-value debt">{{currency}} {{debt}}</div>
                 </div>
             </div>
             <div class="summary-pill">
@@ -140,6 +163,7 @@
                         style="font-size:0.72rem;background:var(--emerald-light);color:#065F46;padding:4px 10px;border-radius:50px;font-weight:700;">{{month}} {{year}}</span>
                 </div>
                 <div style="overflow-x:auto;">
+                    {% if transactions %}
                     <table class="records-table">
                         <thead>
                             <tr>
@@ -158,83 +182,38 @@
                             <td style="font-size:0.78rem;color:var(--text-muted);">{{tra.date}}</td>
                             <td><span class="method-chip">{{tra.account}}</span></td>
                             <td><span class="method-chip">{% if tra.payment_type == 'transfer' %}{{tra.to_account.accountName}}{% else %}-{% endif %}</span></td>
-                            <td><span class="cat-badge ">{{tra.category}}</span></td>
+                            <td><span class="cat-badge ">{{tra.category|title}}</span></td>
                             <!-- <td><span class="cat-badge cat-salary"><i class="bi bi-briefcase-fill"></i>{{tra.category}}</span></td> -->
                             <td><span class="note-text">{{tra.note}}</span></td>
                             <td style="text-align:right;"><span class="{% if tra.payment_type == 'income' %}balance-income{% else %}balance-expense{% endif %}">{% if tra.payment_type == 'income' %}+{% else %}-{% endif %}₹{{tra.currency}}{{tra.amount}}</span></td>
                         </tr>
                         {% endfor %} 
-                        
-                            <!-- <tr>
-                                <td><span class="cat-badge cat-rent"><i class="bi bi-house-fill"></i> Rent</span></td>
-                                <td><span class="method-chip">Chase Checking</span></td>
-                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 19</td>
-                                <td><span class="note-text">Monthly apartment rent</span></td>
-                                <td style="text-align:right;"><span class="balance-expense">-$1,450.00</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="cat-badge cat-food"><i class="bi bi-egg-fried"></i> Food</span></td>
-                                <td><span class="method-chip">Cash</span></td>
-                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 18</td>
-                                <td><span class="note-text">Grocery run — Whole Foods</span></td>
-                                <td style="text-align:right;"><span class="balance-expense">-$87.50</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="cat-badge cat-trans"><i class="bi bi-car-front-fill"></i>
-                                        Transport</span></td>
-                                <td><span class="method-chip">Chase Checking</span></td>
-                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 17</td>
-                                <td><span class="note-text">Uber rides this week</span></td>
-                                <td style="text-align:right;"><span class="balance-expense">-$34.20</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="cat-badge cat-health"><i class="bi bi-heart-pulse-fill"></i>
-                                        Health</span></td>
-                                <td><span class="method-chip">Savings</span></td>
-                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 16</td>
-                                <td><span class="note-text">Gym membership Feb</span></td>
-                                <td style="text-align:right;"><span class="balance-expense">-$45.00</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="cat-badge cat-salary"><i class="bi bi-laptop-fill"></i>
-                                        Freelance</span></td>
-                                <td><span class="method-chip">Chase Checking</span></td>
-                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 15</td>
-                                <td><span class="note-text">Website project payment</span></td>
-                                <td style="text-align:right;"><span class="balance-income">+$850.00</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="cat-badge cat-util"><i class="bi bi-lightning-charge-fill"></i>
-                                        Utilities</span></td>
-                                <td><span class="method-chip">Chase Checking</span></td>
-                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 14</td>
-                                <td><span class="note-text">Electric + Internet bill</span></td>
-                                <td style="text-align:right;"><span class="balance-expense">-$120.00</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="cat-badge cat-shop"><i class="bi bi-bag-fill"></i> Shopping</span></td>
-                                <td><span class="method-chip">Cash</span></td>
-                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 13</td>
-                                <td><span class="note-text">New sneakers — Nike</span></td>
-                                <td style="text-align:right;"><span class="balance-expense">-$160.00</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="cat-badge cat-entert"><i class="bi bi-play-circle-fill"></i>
-                                        Entertainment</span></td>
-                                <td><span class="method-chip">Savings</span></td>
-                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 12</td>
-                                <td><span class="note-text">Netflix + Spotify subs</span></td>
-                                <td style="text-align:right;"><span class="balance-expense">-$28.00</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="cat-badge cat-food"><i class="bi bi-cup-hot-fill"></i> Food</span></td>
-                                <td><span class="method-chip">Cash</span></td>
-                                <td style="font-size:0.78rem;color:var(--text-muted);">Feb 11</td>
-                                <td><span class="note-text">Coffee + lunch meeting</span></td>
-                                <td style="text-align:right;"><span class="balance-expense">-$22.50</span></td>
-                            </tr> -->
                         </tbody>
                     </table>
+                    {% else %}
+                    <div class="col d-flex justify-content-center">
+                        <div class=" text-center p-4 w-100" >
+                            <!-- Icon -->
+                            <div class="mb-3">
+                                <i class="bi bi-receipt" style="font-size: 3rem; color: var(--emerald);"></i>
+                            </div>
+                            <!-- Title -->
+                            <h5 style="font-weight: 700; color: var(--emerald);">
+                                No Transactions Yet
+                            </h5>
+
+                            <!-- Description -->
+                            <p style="
+                                font-size: 0.95rem;
+                                color: var(--text-muted);
+                                margin-top: 10px;
+                            ">
+                                Your transactions will appear here once you start using your accounts.
+                            </p>
+
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -11,6 +11,7 @@ class Transaction(models.Model):
         ('transfer', 'Transfer'),
         ('borrowed', 'Borrowed'),
         ('lent', 'Lent'),
+        ('settled', 'Settled'),
     ]
     CATEGORY_CHOICES = [
         ('Food', 'Food'),
@@ -87,6 +88,7 @@ class Debt(models.Model):
     DEBT_TYPE_CHOICES = [
         ('borrowed', 'Borrowed'),
         ('lent', 'Lent'),
+        ('settled', 'Settled'),
     ]
     RELATION_CHOICES = [
         ('Family', 'Family'),
@@ -130,9 +132,9 @@ class Debt(models.Model):
         if is_new:
             # note text should mirror the logic used in the view
             if self.debtType == 'borrowed':
-                t_note = f"Money {self.debtType} from {self.borrow_lent_from} till {self.duedate}"
+                t_note = f"Money {self.debtType} from {self.borrow_lent_from} till {self.duedate}. Note: {self.note}"
             else:
-                t_note = f"Money {self.debtType} to {self.borrow_lent_from} till {self.duedate}"
+                t_note = f"Money {self.debtType} to {self.borrow_lent_from} till {self.duedate}. Note: {self.note}"
 
             Transaction.objects.create(
                 user=self.user,

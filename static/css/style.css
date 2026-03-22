@@ -1407,3 +1407,28 @@ body {
     }
 }
 
+
+/* NO Accounts Transaction Debt Found State */
+.empty-state-card {
+    max-width: 520px;
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    color: var(--navy);
+    margin-bottom: 12px;
+}
+
+.empty-state-title {
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.empty-state-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: 10px;
+}

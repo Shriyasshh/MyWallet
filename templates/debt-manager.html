@@ -107,8 +107,7 @@
 
                 <!-- Amount -->
                 <div class="form-card fade-up">
-                    <div class="form-card-title"><i class="bi bi-cash-stack"></i> <span id="amountLabel">Amount
-                            Borrowed</span>
+                    <div class="form-card-title"><i class="bi bi-cash-stack"></i> <span id="amountLabel">Amount Borrowed</span><span style="color:var(--red);">*</span>
                     </div>
                     <div class="amount-wrapper">
                         <span class="amount-prefix">{{currency}}</span>
@@ -127,11 +126,11 @@
                             <label class="f-label"><span id="personFieldLabel">Person / Organisation</span> <span
                                     style="color:var(--red);">*</span></label>
                             <input class="f-input" type="text" name="borrow_lent_from" id="personName"
-                                placeholder="e.g. John Smith, Acme Bank…" />
+                                placeholder="e.g. John Smith, Acme Bank…" required />
                         </div>
                         <div class="f-group">
-                            <label class="f-label">Relationship</label>
-                            <select class="f-select" name="relation">
+                            <label class="f-label">Relationship <span style="color:var(--red);">*</span></label>
+                            <select class="f-select" name="relation" required>
                                 <option value="">Select…</option>
                                 <option value="Family">👨‍👩‍👧 Family</option>
                                 <option value="Friends">👫 Friend</option>
@@ -143,12 +142,12 @@
                     </div>
                     <div class="f-group">
                         <label class="f-label">Contact / Phone (optional)</label>
-                        <input class="f-input" type="text" name="contact" placeholder="+1 (555) 000-0000 or email" />
+                        <input class="f-input" type="text" name="contact" placeholder="phone no or email" />
                     </div>
                     <div class="f-group">
-                        <label class="f-label">Linked Account</label>
-                        <select class="f-select" name="linkedAccount">
-                            <option value="">Which account was used?</option>
+                        <label class="f-label">Linked Account <span style="color:var(--red);">*</span></label>
+                        <select class="f-select" name="linkedAccount" required>
+                            <option value="">Select account...</option>
                             {% for account in acc %}
                             <option value="{{ account.id }}">{{ account.accountName }}</option>
                             {% endfor %}
@@ -165,7 +164,7 @@
                             <input class="f-input" name="date" type="date" id="debtDate" />
                         </div>
                         <div class="f-group">
-                            <label class="f-label">Due Date</label>
+                            <label class="f-label">Due Date <span style="color:var(--red);">*</span></label>
                             <input class="f-input" name="duedate" type="date" id="dueDate" />
                         </div>
                     </div>
@@ -227,12 +226,12 @@
                     </div>
                 </div> -->
                     <div class="f-group" style="margin-top:1rem;">
-                        <label class="f-label">Notes / Purpose</label>
+                        <label class="f-label">Notes / Purpose </label>
                         <textarea class="f-input" rows="3" style="resize:none;" name="note"
-                            placeholder="What was the money used for? Any agreed terms?"></textarea>
+                            placeholder="What was the money used for? Any agreed terms?" required></textarea>
                     </div>
                     <div class="f-group">
-                        <label class="f-label">Repayment Plan</label>
+                        <label class="f-label">Repayment Plan </label>
                         <select class="f-select" name="repayment">
                             <option value="">Select repayment plan…</option>
                             <option>Lump sum on due date</option>
@@ -276,60 +275,113 @@
         <div class="list-card fade-up" id="debtList">
             <div class="list-header">
                 <span class="list-header-title">Active Debts</span>
-                <span style="font-size:0.72rem;color:var(--text-muted);" id="debtCount">7 records</span>
             </div>
-            {% for d in debt %}
-            <div class="debt-item" data-id="{{ d.id }}" data-type="{{ d.debtType }}" data-status="{{ d.status_class }}" data-person="{{ d.borrow_lent_from|lower }}" data-name="{{ d.borrow_lent_from }}" data-amount="{{ d.amount }}" data-paid="{{ d.returned }}" data-remain="{{ d.remain }}">
-                <!-- Person Name in Short -->
-                <div class="debt-avatar {{d.debtType}}">RS</div>
-                <div style="flex:1;min-width:0;">
-                    <!-- Perrson Name -->
-                    <div class="debt-name">{{d.borrow_lent_from}}</div>
-                    <!-- Relation and Due Date -->
-                    <div class="debt-meta">📥 {{ d.debtType|capfirst }} from · {{d.relation}} · Due {{d.duedate}}</div>
-                    <!-- Note -->
-                    <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">{{d.note |capfirst}}</div>
-                </div>
-                <div class="debt-progress-wrap">
-                    <!-- Progress Bar -->
-                    <div class="debt-pct">{{d.paid_percentage}}% paid</div>
-                    <div class="debt-progress-bar">
-                        <!-- Progress Bar in Fill -->
-                        <div class="debt-progress-fill" style="width: {{ d.paid_percentage }}%; background: {% if d.debtType == 'borrowed' %}var(--red){% else %}var(--emerald){% endif %};"></div>
+            {% if debt %}
+                {% for d in debt %}
+                <div class="debt-item" data-id="{{ d.id }}" data-type="{{ d.debtType }}" data-status="{{ d.status_class }}" data-person="{{ d.borrow_lent_from|lower }}" data-name="{{ d.borrow_lent_from }}" data-amount="{{ d.amount }}" data-paid="{{ d.returned }}" data-remain="{{ d.remain }}">
+                    <!-- Person Name in Short -->
+                    <div class="debt-avatar {{d.debtType}}">RS</div>
+                    <div style="flex:1;min-width:0;">
+                        <!-- Perrson Name -->
+                        <div class="debt-name">{{d.borrow_lent_from}}</div>
+                        <!-- Relation and Due Date -->
+                        <div class="debt-meta">📥 {{ d.debtType|capfirst }} from · {{d.relation}} · Due {{d.duedate}}</div>
+                        <!-- Note -->
+                        <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">{{d.note |capfirst}}</div>
                     </div>
-                    <!-- Paid Text -->
-                    <div class="debt-paid-text" style="font-size:0.6rem;color:var(--text-muted);margin-top:2px;">{{currency}}{{d.returned}} of {{currency}}{{d.amount}}</div>
-                </div>
+                    <div class="debt-progress-wrap">
+                        <!-- Progress Bar -->
+                        <div class="debt-pct">{{d.paid_percentage}}% paid</div>
+                        <div class="debt-progress-bar">
+                            <!-- Progress Bar in Fill -->
+                            <div class="debt-progress-fill" style="width: {{ d.paid_percentage }}%; background: {% if d.debtType == 'borrowed' %}var(--red){% else %}var(--emerald){% endif %};"></div>
+                        </div>
+                        <!-- Paid Text -->
+                        <div class="debt-paid-text" style="font-size:0.6rem;color:var(--text-muted);margin-top:2px;">{{currency}}{{d.returned}} of {{currency}}{{d.amount}}</div>
+                    </div>
 
-                <div style="text-align:right;flex-shrink:0;">
-                    <!-- Debt Amount Remain -->
-                    <div class="debt-amount {{d.debtType}}">{% if d.debtType == "borrowed" %}-{{currency}} {{d.remain}}
-                        {% else %}{{currency}} {{d.remain}}{% endif %}</div>
-                    <!-- Debt Status -->
-                    <div style="margin-top:4px;"><span class="debt-status status-{{d.status_class}}">{{d.status}}</span></div>
+                    <div style="text-align:right;flex-shrink:0;">
+                        <!-- Debt Amount Remain -->
+                        <div class="debt-amount {{d.debtType}}">{% if d.debtType == "borrowed" %}-{{currency}} {{d.remain}}
+                            {% else %}{{currency}} {{d.remain}}{% endif %}</div>
+                        <!-- Debt Status -->
+                        <div style="margin-top:4px;"><span class="debt-status status-{{d.status_class}}">{{d.status}}</span></div>
+                    </div>
+                    {% if d.status_class != "settled" %}
+                    <div style="flex-shrink:0;" class="debt-action">
+                        <button onclick="openModal(this)"
+                        style="font-size:0.7rem;padding:5px 12px;border-radius:7px;border:1.5px solid var(--border);background:var(--card-bg);cursor:pointer;font-family:'Poppins',sans-serif;font-weight:700;white-space:nowrap;color:var(--navy);transition:all 0.15s;"
+                        onmouseover="this.style.background='var(--emerald)';this.style.color='#fff';this.style.borderColor='var(--emerald)'"
+                        onmouseout="this.style.background='var(--card-bg)';this.style.color='var(--navy)';this.style.borderColor='var(--border)'">💳
+                        Pay</button>
+                    </div>
+                    {% else %}
+                    <div style="flex-shrink:0;" class="debt-action">
+                        <span style="font-size:0.7rem;color:var(--text-light);">—</span>
+                    </div>
+                    {% endif %}
                 </div>
-                {% if d.status_class != "settled" %}
-                <div style="flex-shrink:0;" class="debt-action">
-                    <button onclick="openModal(this)"
-                    style="font-size:0.7rem;padding:5px 12px;border-radius:7px;border:1.5px solid var(--border);background:var(--card-bg);cursor:pointer;font-family:'Poppins',sans-serif;font-weight:700;white-space:nowrap;color:var(--navy);transition:all 0.15s;"
-                    onmouseover="this.style.background='var(--emerald)';this.style.color='#fff';this.style.borderColor='var(--emerald)'"
-                    onmouseout="this.style.background='var(--card-bg)';this.style.color='var(--navy)';this.style.borderColor='var(--border)'">💳
-                    Pay</button>
-                </div>
-                {% else %}
-                <div style="flex-shrink:0;" class="debt-action">
-                    <span style="font-size:0.7rem;color:var(--text-light);">—</span>
-                </div>
-                {% endif %}
-            </div>
-            {% endfor %}
-            <!-- No records message (hidden by default) -->
-            <div id="noRecordsMsg"
-                style="display:none;padding:2rem;text-align:center;color:var(--text-muted);font-size:0.82rem;">No
-                records found.</div>
+                {% endfor %}
+            {% else %}
+                <div class="list-empty text-center py-4" style="color: var(--text-muted); font-weight: 500;">
+                    <i class="bi bi-wallet2" style="font-size: 2rem; color: var(--emerald); display: block; margin-bottom: 10px;">
+                    </i>No Active Debts
+                </div>            
+            {% endif %}
 
         </div>
+        <br>
+        {% if settled %}
+        <div class="list-card fade-up" id="debtList">
+            <div class="list-header">
+                <span class="list-header-title">Settled Debts</span>
+            </div>
+                {% for d in debt %}
+                <div class="debt-item" data-id="{{ d.id }}" data-type="{{ d.debtType }}" data-status="{{ d.status_class }}" data-person="{{ d.borrow_lent_from|lower }}" data-name="{{ d.borrow_lent_from }}" data-amount="{{ d.amount }}" data-paid="{{ d.returned }}" data-remain="{{ d.remain }}">
+                    <!-- Person Name in Short -->
+                    <div class="debt-avatar {{d.debtType}}">RS</div>
+                    <div style="flex:1;min-width:0;">
+                        <!-- Perrson Name -->
+                        <div class="debt-name">{{d.borrow_lent_from}}</div>
+                        <!-- Relation and Due Date -->
+                        <div class="debt-meta">📥 {{ d.debtType|capfirst }} from · {{d.relation}} · Due {{d.duedate}}</div>
+                        <!-- Note -->
+                        <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">{{d.note |capfirst}}</div>
+                    </div>
+                    <div class="debt-progress-wrap">
+                        <!-- Progress Bar -->
+                        <div class="debt-pct">{{d.paid_percentage}}% paid</div>
+                        <div class="debt-progress-bar">
+                            <!-- Progress Bar in Fill -->
+                            <div class="debt-progress-fill" style="width: {{ d.paid_percentage }}%; background: {% if d.debtType == 'borrowed' %}var(--red){% else %}var(--emerald){% endif %};"></div>
+                        </div>
+                        <!-- Paid Text -->
+                        <div class="debt-paid-text" style="font-size:0.6rem;color:var(--text-muted);margin-top:2px;">{{currency}}{{d.returned}} of {{currency}}{{d.amount}}</div>
+                    </div>
 
+                    <div style="text-align:right;flex-shrink:0;">
+                        <!-- Debt Amount Remain -->
+                        <div class="debt-amount {{d.debtType}}">{% if d.debtType == "borrowed" %}-{{currency}} {{d.remain}}
+                            {% else %}{{currency}} {{d.remain}}{% endif %}</div>
+                        <!-- Debt Status -->
+                        <div style="margin-top:4px;"><span class="debt-status status-{{d.status_class}}">{{d.status}}</span></div>
+                    </div>
+                    {% if d.status_class != "settled" %}
+                    <div style="flex-shrink:0;" class="debt-action">
+                        <button onclick="openModal(this)"
+                        style="font-size:0.7rem;padding:5px 12px;border-radius:7px;border:1.5px solid var(--border);background:var(--card-bg);cursor:pointer;font-family:'Poppins',sans-serif;font-weight:700;white-space:nowrap;color:var(--navy);transition:all 0.15s;"
+                        onmouseover="this.style.background='var(--emerald)';this.style.color='#fff';this.style.borderColor='var(--emerald)'"
+                        onmouseout="this.style.background='var(--card-bg)';this.style.color='var(--navy)';this.style.borderColor='var(--border)'">💳Pay</button>
+                    </div>
+                    {% else %}
+                    <div style="flex-shrink:0;" class="debt-action">
+                        <span style="font-size:0.7rem;color:var(--text-light);">—</span>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}                
+            </div>
+            {% endif %}
     </div>
 </div>
 
@@ -463,10 +515,6 @@
         else if (filter === 'settled') show = item.dataset.status === 'settled';
         item.style.display = show ? '' : 'none';
       });
-
-      const noMsg = document.getElementById('noRecordsMsg');
-      const visible = [...document.querySelectorAll('.debt-item')].filter(i => i.style.display !== 'none').length;
-      noMsg.style.display = visible === 0 ? '' : 'none';
       updateCount();
     }
 
@@ -482,10 +530,6 @@
         else if (currentFilter === 'settled') matchesFilter = item.dataset.status === 'settled';
         item.style.display = (matchesSearch && matchesFilter) ? '' : 'none';
       });
-
-      const noMsg = document.getElementById('noRecordsMsg');
-      const visible = [...document.querySelectorAll('.debt-item')].filter(i => i.style.display !== 'none').length;
-      noMsg.style.display = visible === 0 ? '' : 'none';
       updateCount();
     }
 

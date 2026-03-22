@@ -25,17 +25,15 @@ def home(request):
     income = Transaction.objects.filter(user=request.user,payment_type='income',date__month=today.month).aggregate(total = Sum('amount'))['total'] or 0
     expense = Transaction.objects.filter(user=request.user,payment_type='expense',date__month=today.month).aggregate(total = Sum('amount'))['total'] or 0
     trans_count = Transaction.objects.filter(user=request.user,payment_type__in=['expense', 'borrowed', 'lent'],date__month=today.month).count()
-    
-    # savings
-    if income == 0 and expense == 0 and income <= expense:
-        savings = 0
-    else:
-        savings = (income - expense)/income*100
-        savings = str(round(savings, 2))
 
     # Month
     month = today.strftime('%b')
     year = today.strftime('%Y')
+
+    debt_borrowed = Debt.objects.filter(user=request.user, debtType = 'borrowed')
+    borrowed_amt = debt_borrowed.aggregate(total = Sum('amount'))['total'] or 0
+    borrowed_ret = debt_borrowed.aggregate(total = Sum('returned'))['total'] or 0
+    borrowed = borrowed_amt - borrowed_ret
     context= {
         'acc': acc,
         'total_balance': total_balance,
@@ -44,9 +42,17 @@ def home(request):
         'date': dates,
         'income': income,
         'expense': expense,
-        'savings': savings,
+        # 'savings': savings,
         'trans_count': trans_count,
         'month': month,
-        'year': year
+        'year': year,
+        'debt': borrowed,
     }
     return render(request, 'home.html',context)
+
+
+# def login(request):
+#     return render(request, 'login.html')
+
+def about(request):
+    return render(request, 'about.html')
