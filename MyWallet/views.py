@@ -51,8 +51,8 @@ def home(request):
     return render(request, 'home.html',context)
 
 
-# def login(request):
-#     return render(request, 'login.html')
+def login(request):
+    return render(request, 'login.html')
 
-def about(request):
-    return render(request, 'about.html')
+def landing(request):
+    return render(request, 'landing.html')

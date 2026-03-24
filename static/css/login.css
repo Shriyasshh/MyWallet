@@ -1,0 +1,342 @@
+
+        :root {
+            --emerald: #10B981;
+            --emerald-light: #D1FAE5;
+            --emerald-mid: #34D399;
+            --navy: #0F172A;
+            --navy-mid: #1E293B;
+            --sky: #38BDF8;
+            --sky-light: #E0F2FE;
+            --red: #EF4444;
+            --red-light: #FEE2E2;
+            --amber: #F59E0B;
+            --amber-light: #FEF3C7;
+            --purple-light: #EDE9FE;
+            --purple: #8B5CF6;
+            --bg: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --text-light: #94A3B8;
+            --border: #E2E8F0;
+            --shadow-sm: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04);
+            --shadow-md: 0 4px 12px rgba(15,23,42,0.08), 0 2px 4px rgba(15,23,42,0.04);
+            --shadow-lg: 0 10px 30px rgba(15,23,42,0.10), 0 4px 8px rgba(15,23,42,0.06);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ══════════════════════════════
+           BACKGROUND — hero style
+        ══════════════════════════════ */
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--navy);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated glow orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(90px);
+        }
+        .orb1 {
+            width: 580px; height: 580px;
+            top: -180px; left: -160px;
+            background: radial-gradient(circle, rgba(16,185,129,0.22), transparent 70%);
+            animation: drift1 13s ease-in-out infinite alternate;
+        }
+        .orb2 {
+            width: 480px; height: 480px;
+            bottom: -140px; right: -130px;
+            background: radial-gradient(circle, rgba(56,189,248,0.18), transparent 70%);
+            animation: drift2 10s ease-in-out infinite alternate;
+        }
+        .orb3 {
+            width: 320px; height: 320px;
+            top: 40%; left: 58%;
+            background: radial-gradient(circle, rgba(139,92,246,0.1), transparent 70%);
+            animation: drift1 18s ease-in-out infinite alternate;
+        }
+        @keyframes drift1 { from{transform:translate(0,0);} to{transform:translate(28px,20px);} }
+        @keyframes drift2 { from{transform:translate(0,0);} to{transform:translate(-24px,-16px);} }
+
+        /* Grid overlay */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.024) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.024) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ══════════════════════════════
+           BRAND above card
+        ══════════════════════════════ */
+        .page-wrap {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 520px;
+            animation: rise 0.45s cubic-bezier(0.16,1,0.3,1) both;
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .brand-icon {
+            width: 40px; height: 40px;
+            background: var(--emerald);
+            border-radius: 11px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 0 6px rgba(16,185,129,0.18);
+        }
+        .brand-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+
+        /* ══════════════════════════════
+           CARD
+        ══════════════════════════════ */
+        .auth-box {
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 22px;
+            box-shadow:
+                0 32px 80px rgba(0,0,0,0.38),
+                0 2px 1px rgba(255,255,255,0.08) inset;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Top accent strip ── */
+        .accent-strip {
+            height: 4px;
+            background: linear-gradient(90deg, var(--emerald), var(--sky));
+        }
+
+        /* ── Logo row inside card (hidden — brand shown above) ── */
+        .logo-row { display: none; }
+
+        /* ── Tab row ── */
+        .tab-row {
+            display: flex;
+            margin: 20px 28px 0;
+            background: var(--navy);
+            border-radius: 10px;
+            padding: 5px;
+            gap: 4px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 9px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            background: var(--emerald);
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(16,185,129,0.35);
+        }
+
+        /* ── Form body ── */
+        .form-body {
+            padding: 22px 28px 28px;
+        }
+
+        .panel { display: none; }
+        .panel.active {
+            display: block;
+            animation: rise 0.25s ease both;
+        }
+
+        /* ── Field ── */
+        .field { margin-bottom: 13px; }
+
+        .field label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            padding: 10px 13px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.83rem;
+            color: var(--text-main);
+            background: #FAFCFF;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field input::placeholder { color: var(--text-light); }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: var(--emerald);
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+            background: #fff;
+        }
+
+        .field select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%2394A3B8' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 34px;
+            cursor: pointer;
+        }
+
+        /* Two-column row */
+        .field-row { display: flex; gap: 10px; }
+        .field-row .field { flex: 1; }
+
+        /* ── Button ── */
+        .btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--emerald), #059669);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(16,185,129,0.38);
+        }
+
+        .btn:active { transform: scale(0.99); }
+
+        /* ── Divider ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 16px 0;
+            font-size: 0.7rem;
+            color: var(--text-light);
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ── Social buttons ── */
+        .social-row { display: flex; gap: 8px; }
+        .social-btn {
+            flex: 1;
+            padding: 9px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: #fff;
+            font-family: inherit;
+            font-size: 0.77rem;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .social-btn:hover {
+            border-color: #94a3b8;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ── Footer text ── */
+        .foot {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.76rem;
+            color: var(--text-muted);
+        }
+        .foot a {
+            color: var(--emerald);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .foot a:hover { text-decoration: underline; }
+
+        /* Bottom note outside card */
+        .below-card {
+            text-align: center;
+            margin-top: 1.25rem;
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.35);
+        }
+        .below-card a {
+            color: var(--emerald-mid);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 480px) {
+            body { padding: 16px; }
+            .form-body { padding: 18px 20px 24px; }
+            .tab-row { margin: 16px 20px 0; }
+            .field-row { flex-direction: column; gap: 0; }
+        }
+    
