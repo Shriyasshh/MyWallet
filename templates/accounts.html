@@ -14,9 +14,9 @@
 
 		<!-- Summary Row -->
 		<div class="row g-3 mb-4 fade-in">
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="stat-mini-card text-center p-3">
-					<div class="stat-mini-label mb-2">Total Assets</div>
+					<div class="stat-mini-label mb-2">Total Balance</div>
 					<div style="
                             font-size: 1.8rem;
                             font-weight: 800;
@@ -29,7 +29,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="stat-mini-card text-center p-3">
 					<div class="stat-mini-label mb-2">Borrowed</div>
 					<div style="
@@ -44,7 +44,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<div class="stat-mini-card text-center p-3">
 					<div class="stat-mini-label mb-2">Lent</div>
 					<div style="
@@ -59,21 +59,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-3">
-				<div class="stat-mini-card text-center p-3">
-					<div class="stat-mini-label mb-2">Net Worth</div>
-					<div style="
-                            font-size: 1.8rem;
-                            font-weight: 800;
-                            color: var(--navy);
-                        ">
-						{{currency}} {{networth}}
-					</div>
-					<div style="font-size: 0.72rem; color: var(--emerald)">
-						<i class="bi bi-arrow-up"></i> +5.2% this month
-					</div>
-				</div>
-			</div>
+			
 		</div>
 
 		<!-- Account Detail Cards -->
@@ -118,7 +104,7 @@
 					<div class="account-mini-txn">
 						<span style="color: var(--text-muted)">{{ txn.note|default:txn.category }}</span>
 						<span
-							class="{% if txn.payment_type == 'income' %}balance-income{% else %}balance-expense{% endif %}">
+							class="{% if txn.payment_type == 'income' or txn.payment_type == 'borrowed' %}balance-income{% else %}balance-expense{% endif %}">{% if txn.payment_type == 'income' or txn.payment_type == 'borrowed' %}+{% else %}-{% endif %}
 							{{acc.get_currency_display}}{{ txn.amount }}</span>
 					</div>
 

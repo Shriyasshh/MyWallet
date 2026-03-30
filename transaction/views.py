@@ -92,7 +92,6 @@ def add_record(request):
         time = request.POST.get('time')
         note = request.POST.get('note')
         payee = request.POST.get('payee')
-        print(payment_type, amount, category, account_id, to_account_id, date, time, note, payee)
         Transaction.objects.create(
             user=request.user,
             payment_type=payment_type,
@@ -176,7 +175,6 @@ def transaction(request,pk):
 def debt_manager(request):
     acc = AddAccount.objects.filter(user=request.user)
     currency = acc.first().get_currency_display() if acc.exists() else ''
-    print(currency)
     # Borrowed
     debt_borrowed = Debt.objects.filter(user=request.user, debtType = 'borrowed')
     borrowed_count = debt_borrowed.count()
@@ -194,6 +192,9 @@ def debt_manager(request):
     
     debt = Debt.objects.filter(user=request.user)
     today = date.today()
+    overdue = Debt.objects.filter(user = request.user).filter(duedate__lt=today)
+    overdue_amt = overdue.aggregate(total = Sum('amount'))['total'] or 0
+    overdue_count = overdue.count()
     for d in debt:
         d.paid_percentage = (d.returned * 100) / d.amount
         d.remain = d.amount - d.returned
@@ -209,7 +210,6 @@ def debt_manager(request):
         else:
             d.status = "On Track"
             d.status_class = "ok"
-        print(d.remain)
     if request.method =='POST':
         form = DebtForm(request.POST)
         if form.is_valid():
@@ -231,6 +231,9 @@ def debt_manager(request):
                'lent_count': lent_count,
                'net_worth': net_worth,
                'debt': debt,
+               'overdue': overdue,
+               'overdue_count': overdue_count,
+               'overdue_amt': overdue_amt,
                }
     return render(request, 'debt-manager.html',context)
 

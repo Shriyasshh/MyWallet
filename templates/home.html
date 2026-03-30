@@ -178,14 +178,15 @@
                         <tbody>
                             {% for tra in transactions %}
                         <tr>
-                            <!-- <td style="color:var(--text-light);font-size:0.72rem;">47</td> -->
                             <td style="font-size:0.78rem;color:var(--text-muted);">{{tra.date}}</td>
                             <td><span class="method-chip">{{tra.account}}</span></td>
                             <td><span class="method-chip">{% if tra.payment_type == 'transfer' %}{{tra.to_account.accountName}}{% else %}-{% endif %}</span></td>
                             <td><span class="cat-badge ">{{tra.category|title}}</span></td>
                             <!-- <td><span class="cat-badge cat-salary"><i class="bi bi-briefcase-fill"></i>{{tra.category}}</span></td> -->
                             <td><span class="note-text">{{tra.note}}</span></td>
-                            <td style="text-align:right;"><span class="{% if tra.payment_type == 'income' %}balance-income{% else %}balance-expense{% endif %}">{% if tra.payment_type == 'income' %}+{% else %}-{% endif %}₹{{tra.currency}}{{tra.amount}}</span></td>
+                            <td style="text-align:right;">
+                                <span class="{% if tra.payment_type == 'income' or tra.payment_type == 'borrowed' %}balance-income{% else %}balance-expense{% endif %}">
+                                {% if tra.payment_type == 'income' or tra.payment_type == 'borrowed' %}+{% else %}-{% endif %}₹{{tra.currency}}{{tra.amount}}</span></td>
                         </tr>
                         {% endfor %} 
                         </tbody>

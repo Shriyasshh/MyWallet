@@ -91,7 +91,9 @@
                             <td><span class="cat-badge ">{{tra.category}}</span></td>
                             <!-- <td><span class="cat-badge cat-salary"><i class="bi bi-briefcase-fill"></i>{{tra.category}}</span></td> -->
                             <td><span class="note-text">{{tra.note}}</span></td>
-                            <td style="text-align:right;"><span class="{% if tra.payment_type == 'income' %}balance-income{% else %}balance-expense{% endif %}">{% if tra.payment_type == 'income' %}+{% else %}-{% endif %}₹{{tra.currency}}{{tra.amount}}</span></td>
+                            <td style="text-align:right;">
+                                <span class="{% if tra.payment_type == 'income' or tra.payment_type == 'borrowed' %}balance-income{% else %}balance-expense{% endif %}">
+                                {% if tra.payment_type == 'income' or tra.payment_type == 'borrowed' %}+{% else %}-{% endif %}₹{{tra.currency}}{{tra.amount}}</span></td>
                         </tr>
                         {% endfor %}                      
                     </tbody>

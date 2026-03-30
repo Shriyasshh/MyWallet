@@ -33,7 +33,6 @@ def accounts(request):
     lent = lent_amt - lent_ret
     lent_count = debt_lent.count()
 
-    networth = total_balance - borrowed - lent
 
     currency = acc.first().get_currency_display() if acc.exists() else ''
     context= {
@@ -45,7 +44,6 @@ def accounts(request):
         'borrowed_count': borrowed_count,
         'lent': lent,
         'lent_count': lent_count,
-        'networth': networth
     }
     return render(request, 'accounts.html',context)
 

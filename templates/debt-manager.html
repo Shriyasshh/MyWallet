@@ -59,8 +59,8 @@
         </div>
         <div class="sum-card">
             <div class="sum-label">Overdue</div>
-            <div class="sum-value" style="color:var(--red);">$800</div>
-            <div class="sum-sub">2 debts past due date</div>
+            <div class="sum-value" style="color:var(--red);">{{currency}} {{overdue_amt}}</div>
+            <div class="sum-sub">{{overdue_count}} debts past due date</div>
             <div class="sum-bar">
                 <div class="sum-bar-fill" style="width:25%;background:var(--red);"></div>
             </div>
@@ -80,6 +80,13 @@
 
         <form action="" method="post">
             {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <div style="max-width: 760px;">
 
                 <!-- Borrowed / Lent selector -->
@@ -113,6 +120,9 @@
                         <span class="amount-prefix">{{currency}}</span>
                         <input class="amount-input borrowed" name="amount" id="amountInput" type="number"
                             placeholder="0.0" step="0.01" min="0" />
+                        {% if form.amount.errors %}
+                            <small style="color: var(--red);">{{ form.amount.errors.0 }}</small>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -127,17 +137,23 @@
                                     style="color:var(--red);">*</span></label>
                             <input class="f-input" type="text" name="borrow_lent_from" id="personName"
                                 placeholder="e.g. John Smith, Acme Bank…" required />
+                            {% if form.borrow_lent_from.errors %}
+                                <small style="color: var(--red);">{{ form.borrow_lent_from.errors.0 }}</small>
+                            {% endif %}
                         </div>
                         <div class="f-group">
                             <label class="f-label">Relationship <span style="color:var(--red);">*</span></label>
                             <select class="f-select" name="relation" required>
                                 <option value="">Select…</option>
                                 <option value="Family">👨‍👩‍👧 Family</option>
-                                <option value="Friends">👫 Friend</option>
+                                <option value="Friend">👫 Friend</option>
                                 <option value="Colleague">💼 Colleague</option>
                                 <option value="Bank">🏦 Bank / Institution</option>
                                 <option value="Other">📦 Other</option>
                             </select>
+                            {% if form.relation.errors %}
+                                <small style="color: var(--red);">{{ form.relation.errors.0 }}</small>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="f-group">
@@ -152,6 +168,9 @@
                             <option value="{{ account.id }}">{{ account.accountName }}</option>
                             {% endfor %}
                         </select>
+                        {% if form.linkedAccount.errors %}
+                            <small style="color: var(--red);">{{ form.linkedAccount.errors.0 }}</small>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -162,10 +181,16 @@
                         <div class="f-group">
                             <label class="f-label">Date <span style="color:var(--red);">*</span></label>
                             <input class="f-input" name="date" type="date" id="debtDate" />
+                            {% if form.date.errors %}
+                                <small style="color: var(--red);">{{ form.date.errors.0 }}</small>
+                            {% endif %}
                         </div>
                         <div class="f-group">
                             <label class="f-label">Due Date <span style="color:var(--red);">*</span></label>
                             <input class="f-input" name="duedate" type="date" id="dueDate" />
+                            {% if form.duedate.errors %}
+                                <small style="color: var(--red);">{{ form.duedate.errors.0 }}</small>
+                            {% endif %}
                         </div>
                     </div>
                     <!-- <div class="toggle-row">
@@ -229,6 +254,9 @@
                         <label class="f-label">Notes / Purpose </label>
                         <textarea class="f-input" rows="3" style="resize:none;" name="note"
                             placeholder="What was the money used for? Any agreed terms?" required></textarea>
+                        {% if form.note.errors %}
+                            <small style="color: var(--red);">{{ form.note.errors.0 }}</small>
+                        {% endif %}
                     </div>
                     <div class="f-group">
                         <label class="f-label">Repayment Plan </label>
@@ -277,6 +305,7 @@
                 <span class="list-header-title">Active Debts</span>
             </div>
             {% if debt %}
+                
                 {% for d in debt %}
                 <div class="debt-item" data-id="{{ d.id }}" data-type="{{ d.debtType }}" data-status="{{ d.status_class }}" data-person="{{ d.borrow_lent_from|lower }}" data-name="{{ d.borrow_lent_from }}" data-amount="{{ d.amount }}" data-paid="{{ d.returned }}" data-remain="{{ d.remain }}">
                     <!-- Person Name in Short -->
@@ -564,25 +593,7 @@
       document.getElementById('settleModal').classList.remove('open');
     }
 
-    // ── SAVE (placeholder) ──
-    // function saveDebt() {
-    //     const amt = parseFloat(document.getElementById('amountInput').value);
-    //     const name = document.getElementById('personName').value.trim();
-    //     if (!amt || amt <= 0) { document.getElementById('amountInput').style.borderColor = 'var(--red)'; document.getElementById('amountInput').focus(); setTimeout(() => document.getElementById('amountInput').style.borderColor = '', 2000); return; }
-    //     if (!name) { document.getElementById('personName').style.borderColor = 'var(--red)'; document.getElementById('personName').focus(); setTimeout(() => document.getElementById('personName').style.borderColor = '', 2000); return; }
-
-    //     // Add to list and switch to list tab
-    //     const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-    //     debts.unshift({
-    //         id: Date.now(), type: currentDebtType, person: name, initials,
-    //         amount: amt, paid: 0,
-    //         due: document.getElementById('dueDate').value || '2026-12-31',
-    //         status: 'ok', priority: 'medium', note: 'Newly added', relation: 'Other'
-    //     });
-    //     resetForm();
-    //     switchTab('list', document.querySelectorAll('.page-tab')[1]);
-    // }
-
+    
     // ── RESET FORM ──
     function resetForm() {
         document.getElementById('amountInput').value = '';

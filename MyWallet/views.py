@@ -1,9 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from accounts.models import AddAccount
 from transaction.models import Transaction,Debt
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
-from datetime import date ,timedelta
+from datetime import date 
+from .forms import SignInForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib import auth
+
+
 
 @login_required
 def home(request):
@@ -52,7 +58,40 @@ def home(request):
 
 
 def login(request):
-    return render(request, 'login.html')
+    if request.method == 'POST':
+        login_form = AuthenticationForm(request, data=request.POST)
+        if login_form.is_valid():
+            user = login_form.get_user()
+            auth_login(request, user)
+            if AddAccount.objects.filter(user=request.user).count() > 0:
+                return redirect('home')
+            return redirect('add_account')
+    else:
+        login_form = AuthenticationForm()
+    context={
+        'l_form':login_form
+    }
+    return render(request, 'login.html',context)
+
+def signin(request):
+    if request.method =='POST':
+        sign_form =SignInForm(request.POST)
+        if sign_form.is_valid():
+            sign_form.save()
+            return redirect('login')
+    else:    
+        sign_form =SignInForm()
+
+    context={
+    's_form':sign_form,
+    }
+    return render(request, 'signin.html',context)
+
+def logout(request):
+    auth_logout(request)
+    return redirect('landing')
 
 def landing(request):
     return render(request, 'landing.html')
+
+
