@@ -128,10 +128,8 @@ Account {% endblock %} {% block content-head %}
 
                     <div class="f-row">
                         <div class="f-group">
-                            <label class="f-label"
-                                >Opening Balance
-                                <span style="color: var(--red)">*</span></label
-                            >
+                            <label class="f-label">Opening Balance
+                                <span style="color: var(--red)">*</span></label>
                             <div class="input-prefix">
                                 <span class="prefix"></span>
                                 <input class="f-input"type="number"id="accountBalance"name="accountBalance"placeholder="0.00"step="0.01"min="0"oninput="updatePreview()"/>
@@ -142,12 +140,7 @@ Account {% endblock %} {% block content-head %}
                         </div>
                         <div class="f-group">
                             <label class="f-label">Currency</label>
-                            <select
-                                class="f-select"
-                                name="currency"
-                                id="currency"
-                                onchange="updatePreview()"
-                            >
+                            <select class="f-select"name="currency"id="currency"onchange="updatePreview()">
                                 <option value="INR" data-symbol="₹">
                                     INR — Indian Rupee
                                 </option>
@@ -170,6 +163,9 @@ Account {% endblock %} {% block content-head %}
                                     AUD — Australian Dollar
                                 </option>
                             </select>
+                            {% if form.currency.errors %}
+                                <small style="color: var(--red);">{{ form.currency.errors.0 }}</small>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -177,16 +173,25 @@ Account {% endblock %} {% block content-head %}
                         <div class="f-group">
                             <label class="f-label">Bank / Institution</label>
                             <input class="f-input"type="text"name="bankName" placeholder="e.g. Chase, HDFC, Fidelity"/>
+                            {% if form.bankName.errors %}
+                                <small style="color: var(--red);">{{ form.bankName.errors.0 }}</small>
+                            {% endif %}
                         </div>
                         <div class="f-group">
                             <label class="f-label">Account Number (optional)</label>
                             <input class="f-input" type="text" name="accountNumber" placeholder="Last 4 digits e.g. 4521"/>
+                            {% if form.accountNumber.errors %}
+                                <small style="color: var(--red);">{{ form.accountNumber.errors.0 }}</small>
+                            {% endif %}
                         </div>
                     </div>
 
                     <div class="f-group">
                         <label class="f-label">Description / Notes</label>
                         <textarea class="f-input" name="description" placeholder="Any notes about this account…" style="resize: none;" ></textarea>
+                        {% if form.description.errors %}
+                            <small style="color: var(--red);">{{ form.description.errors.0 }}</small>
+                        {% endif %}
                     </div>
                 </div>
 

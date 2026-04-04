@@ -38,5 +38,5 @@ class DebtForm(forms.ModelForm):
             'date',
             'duedate',
             'note',
-            'repayment'
+            'repayment',
         ]
