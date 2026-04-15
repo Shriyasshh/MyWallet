@@ -138,3 +138,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+# SUPABASE
+# SUPABASE_URL = "https://your-project.supabase.co"
+# SUPABASE_KEY = "your-anon-key"  # or service role key for server-side

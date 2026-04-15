@@ -35,13 +35,11 @@
         {% if user.is_authenticated %}
         <div class="nav-actions">
             <a href="{% url 'home' %}" class="btn-login"><i class="bi bi-house"></i>Home</a>
-            </div>
         </div>
         {% else %}
         <div class="nav-actions">
             <a href="{% url 'login' %}" class="btn-login"><i class="bi bi-box-arrow-in-right"></i> Login</a>
             <a href="{% url 'signin' %}" class="btn-signup"><i class="bi bi-person-plus-fill"></i> Get Started</a>
-            </div>
         </div>
         {% endif %}
     </nav>

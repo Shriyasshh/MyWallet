@@ -3,11 +3,17 @@ from accounts.models import AddAccount
 from transaction.models import Transaction,Debt
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
-from datetime import date 
+from datetime import date, timedelta
 from .forms import SignInForm
+# from django.utils import timezone
+# from collections import defaultdict
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib import auth
+# from django.contrib import messages
+# from django.contrib.auth import update_session_auth_hash
+# from django.contrib.auth.hashers import check_password
+
 
 
 
@@ -95,6 +101,42 @@ def landing(request):
     return render(request, 'landing.html')
 
 
-@login_required
-def settings(request):
-    return render(request, 'settings.html')
+# @login_required
+# def settings(request):
+#     return render(request, 'setting.html')
+
+# @login_required
+# def update_profile(request):
+#     if request.method == 'POST':
+#         user = request.user
+#         user.first_name = request.POST.get('first_name', '')
+#         user.last_name  = request.POST.get('last_name', '')
+#         user.save()
+#     messages.success(request, 'Profile updated successfully.')
+#     return redirect('settings')
+
+# @login_required
+# def change_password(request):
+#     if request.method == 'POST':
+#         current  = request.POST.get('current_password')
+#         new_pass = request.POST.get('new_password')
+#         confirm  = request.POST.get('confirm_password')
+
+#         if not request.user.check_password(current):
+#             messages.error(request, 'Current password is incorrect.')
+#             return redirect('settings')
+
+#         if new_pass != confirm:
+#             messages.error(request, 'Passwords do not match.')
+#             return redirect('settings')
+
+#         # Update in Django
+#         request.user.set_password(new_pass)
+#         request.user.save()
+#         update_session_auth_hash(request, request.user)  # keep user logged in
+
+#         # Also update in Supabase Auth if using Supabase auth
+#         # supabase.auth.update_user({'password': new_pass})
+
+#         messages.success(request, 'Password updated successfully.')
+#     return redirect('settings')

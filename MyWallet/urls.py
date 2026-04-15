@@ -26,5 +26,9 @@ urlpatterns = [
     path('login/',views.login,name='login'),
     path('signin/',views.signin,name='signin'),
     path('logout/',views.logout,name='logout'),
-    path('settings/',views.settings,name='settings'),
+    # path('report/',views.report,name='report'),
+    # path('settings/',views.settings,name='settings'),
+    # path('settings/profile/', views.update_profile, name='update_profile'),
+    # path('settings/password/', views.change_password, name='change_password'),
+
 ]
